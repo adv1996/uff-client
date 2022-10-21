@@ -1,0 +1,6 @@
+{
+  "/api/league/demo": "/settings",
+  "/api/league/demo/users": "/users",
+  "/api/league/demo/rosters": "/rosters",
+  "/api/league/demo/matchups/*": "/matchup_$1"
+}
