@@ -12,7 +12,7 @@ export default defineConfig({
       name: "uff-client",
       formats: ["es", "umd"],
       fileName: (format) => `uff-client.${format}.js`,
-    }
+    },
   },
   resolve: {
     alias: {
@@ -20,4 +20,3 @@ export default defineConfig({
     },
   },
 });
-
