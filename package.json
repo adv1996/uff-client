@@ -18,12 +18,13 @@
     "build": "tsc && vite build",
     "preview": "vite preview",
     "dev:api": "json-server ./src/test_utils/db.json --routes ./src/test_utils/routes.json",
-    "test": "vitest",
+    "test": "vitest run",
     "lint": "eslint .",
     "lint:prettier": "prettier --check '**/*.{ts,tsx,json}'",
     "lint:eslint": "eslint .",
     "lint:type": "tsc; rm -rf types",
-    "lint:fix": "eslint --fix . && prettier --write '**/*.{ts,tsx,json}'"
+    "lint:fix": "eslint --fix . && prettier --write '**/*.{ts,tsx,json}'",
+    "prepare": "husky install"
   },
   "devDependencies": {
     "@types/lodash": "^4.14.186",
@@ -35,6 +36,7 @@
     "eslint-config-prettier": "^8.5.0",
     "eslint-config-react-app": "^7.0.1",
     "eslint-plugin-prettier": "^4.2.1",
+    "husky": "^8.0.1",
     "isomorphic-fetch": "^3.0.0",
     "json-server": "^0.17.0",
     "msw": "^0.47.4",
