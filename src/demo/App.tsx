@@ -1,58 +1,127 @@
-import { useState } from "react";
-import { create } from "../";
-import { Platform } from "../interfaces/Settings.interface";
-import { League } from "../models/LeagueModel/LeagueModel";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import "../index.css";
+import { League, Platform } from "../interfaces";
+import { LeagueClient } from "../models/LeagueClient";
 
 const App = () => {
-  const [value, setValue] = useState("");
+  const leagueClient = useMemo(() => new LeagueClient(), []);
   const [leagues, setLeagues] = useState<League[]>([]);
+  const [value, setValue] = useState("demo");
+  const [weeks, setWeeks] = useState("2");
 
-  const fetchLeague = async () => {
-    const league = await create(value, Platform.SLEEPER);
-    setLeagues((leagues) => [...leagues, league]);
+  const fetchLeague = useCallback(async () => {
+    await leagueClient.addLeague(value, Platform.SLEEPER);
+  }, [leagueClient, value]);
+
+  const fetchMatchups = useCallback(
+    async (league: League) => {
+      await leagueClient.retrieveMatchupsByLeague(
+        league.settings.id,
+        1,
+        parseInt(weeks)
+      );
+    },
+    [leagueClient, weeks]
+  );
+
+  const removeLeague = (id: string) => {
+    leagueClient.removeLeague(id);
   };
 
-  const fetchMatchups = async () => {
-    const league = leagues[0];
-    const matchups = await league.retrieveMatchups(1, 2);
-    console.log(matchups);
-  };
+  const leagueResults = useMemo(() => {
+    return leagues.map((league) => league.getResults().ownerResults);
+  }, [leagues]);
 
-  const fetchResults = () => {
-    const league = leagues[0];
-    const results = league.getResults();
-    console.log(results);
-  };
+  useEffect(() => {
+    const subscription = leagueClient.onMessage().subscribe((value) => {
+      setLeagues([...value]);
+    });
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [leagueClient]);
 
   return (
     <main>
-      <h1>Demo App</h1>
-      <div>
-        <ul>
-          <li>784961395996356608</li>
-          <li>849473673709629440</li>
-        </ul>
+      <div className="tw-p-4">
+        <h1 className="tw-text-5xl">Universal Fantasy Football Client</h1>
       </div>
-      <div>
-        <select>
-          <option>SLEEPER</option>
-          <option>ESPN</option>
-        </select>
-        <input
-          type="text"
-          value={value}
-          onChange={(e) => setValue(e.target.value)}
-        />
-        <button onClick={fetchLeague}>Retrieve League</button>
-        <button onClick={fetchMatchups}>Fetch Matchups</button>
-        <button onClick={fetchResults}>Results</button>
-      </div>
-      <div>
-        {leagues.map((league, index) => {
-          return (
-            <p key={`${league.settings.id}-${index}`}>{league.settings.name}</p>
-          );
-        })}
+      <div className="tw-container tw-mx-auto">
+        <div className="tw-flex tw-flex-ro tw-space-x-10">
+          <div>
+            <h2 className="tw-text-xl">How to Use?</h2>
+            <ol className="tw-list-decimal">
+              <li>Create League Client</li>
+              <code>const client = new LeagueClient();</code>
+              <li>Add League</li>
+              <code>client.addLeague("demo", Platform.SLEEPER);</code>
+              <li>Retrieve Matchups</li>
+              <code>league.retrieveMatchups(1, 2);</code>
+              <li>Calculate Results</li>
+              <code>league.getResults();</code>
+            </ol>
+          </div>
+          <div>
+            <h2 className="tw-text-xl">Try it out!</h2>
+            <div>
+              <label>Choose Platform</label>
+              <select className="tw-border tw-border-black tw-mx-2">
+                <option>SLEEPER</option>
+                <option>ESPN</option>
+                <option>YAHOO</option>
+              </select>
+              <label>Enter League ID</label>
+              <input
+                type="text"
+                className="tw-border tw-border-black tw-mx-2"
+                onChange={(e) => setValue(e.target.value)}
+                value={value}
+              />
+              <button
+                className="tw-bg-green-200 tw-px-2 tw-border tw-border-black"
+                onClick={fetchLeague}
+              >
+                Add League
+              </button>
+            </div>
+            <div className="tw-mt-4">
+              <p>Added Leagues</p>
+              <label>Weeks to Fetch</label>
+              <input
+                value={weeks}
+                className="tw-border tw-border-black tw-mx-2"
+                type="number"
+                onChange={(e) => setWeeks(e.target.value)}
+              />
+              <ol className="tw-list-disc tw-px-4">
+                {leagues.map((league) => {
+                  return (
+                    <div key={league.settings.id}>
+                      <li>{league.settings.name}</li>
+                      <button
+                        onClick={() => fetchMatchups(league)}
+                        className="tw-bg-green-200 tw-px-2 tw-border tw-border-black"
+                      >
+                        Retrieve Matchups
+                      </button>
+                      <button
+                        onClick={() => removeLeague(league.settings.id)}
+                        className="tw-bg-red-200 tw-px-2 tw-border tw-border-black"
+                      >
+                        Remove
+                      </button>
+                    </div>
+                  );
+                })}
+              </ol>
+              {leagueResults.map((result, index) => {
+                return result.map((r, i) => {
+                  return <p key={`${index}-${i}`}>{r.user.displayName}</p>;
+                });
+              })}
+            </div>
+          </div>
+        </div>
       </div>
     </main>
   );
