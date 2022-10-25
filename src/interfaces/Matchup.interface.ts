@@ -1,4 +1,5 @@
 export interface Matchup {
+  week: number;
   startersPoints: number[];
   starters: string[];
   rosterId: number;

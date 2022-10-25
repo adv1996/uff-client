@@ -1,4 +1,4 @@
-import { AtLeast, Matchup, Owner, Platform, Results, Settings } from ".";
+import { AtLeast, Matchup, Owner, OwnerResults, Platform, Settings } from ".";
 
 export interface ILeagueClient {
   leagues: League[];
@@ -17,5 +17,5 @@ export interface League {
   owners: Owner[];
   initialize(): Promise<void>;
   retrieveMatchups(start: number, end: number): Promise<Matchup[][]>;
-  getResults(): Results;
+  getResults(): OwnerResults[];
 }

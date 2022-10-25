@@ -1,13 +1,21 @@
 import { User } from "./Owner.interface";
 
-export interface OwnerResults {
-  user: User;
-  pointsFor: number;
-  pointsAgainst: number;
-  weeklyScores: number[]; // TODO this will change to a matchup object
-  oppWeeklyScores: number[];
+export enum OUTCOME {
+  WIN = "WIN",
+  LOSS = "LOSS",
+  TIE = "TIE",
 }
 
-export interface Results {
-  ownerResults: OwnerResults[];
+interface WeeklyResults {
+  week: number;
+  pointsFor: number;
+  pointsAgainst: number;
+  outcome: OUTCOME;
+}
+
+export interface OwnerResults {
+  user: User;
+  totalPointsFor: number;
+  totalPointsAgainst: number;
+  weeklyResults: WeeklyResults[];
 }

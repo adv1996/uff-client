@@ -2,8 +2,16 @@ import groupBy from "lodash/groupBy";
 import keyBy from "lodash/keyBy";
 import mapValues from "lodash/mapvalues";
 import range from "lodash/range";
-import sum from "lodash/sum";
-import { Matchup, Owner, Platform, Results, User } from "../../interfaces";
+import sumBy from "lodash/sumBy";
+import zipWith from "lodash/zipWith";
+import {
+  Matchup,
+  OUTCOME,
+  Owner,
+  OwnerResults,
+  Platform,
+  User,
+} from "../../interfaces";
 import { League } from "../LeagueModel/LeagueModel";
 import { LeagueModelSleeper } from "../LeagueModelSleeper";
 
@@ -26,12 +34,20 @@ const buildRosterUserMap = (
   return mapValues(rosterOwnerMap, (owner) => ownerUserMap[owner.ownerId]);
 };
 
-// this is a perfect thing to unit test...
+const calculateOutcome = (pointsA = 0, pointsB = 0): OUTCOME => {
+  if (pointsA > pointsB) {
+    return OUTCOME.WIN;
+  } else if (pointsA < pointsB) {
+    return OUTCOME.LOSS;
+  }
+  return OUTCOME.TIE;
+};
+
 const assembleOwnerMatchups = (
   users: User[],
   owners: Owner[],
   matchups: Record<number, Matchup[]>
-): Results => {
+): OwnerResults[] => {
   const rosterMap = buildRosterUserMap(users, owners);
   const weeks = Object.keys(matchups);
   const ownerMatchupsMap: Record<number, Matchup[]> = {};
@@ -68,20 +84,23 @@ const assembleOwnerMatchups = (
     const rosterId = parseInt(owner);
     const matchups = ownerMatchupsMap[rosterId];
     const oppMatchups = opponentMatchupsMap[rosterId];
-    const weeklyScores = matchups.map((matchup) => matchup.points);
-    const oppWeeklyScores = oppMatchups.map((matchup) => matchup.points);
+    const weeklyResults = zipWith(matchups, oppMatchups, (team1, team2) => {
+      return {
+        week: team1.week,
+        pointsFor: team1.points,
+        pointsAgainst: team2.points,
+        outcome: calculateOutcome(team1.points, team2.points),
+      };
+    });
     return {
       user: rosterMap[rosterId],
-      pointsFor: sum(weeklyScores),
-      pointsAgainst: sum(oppWeeklyScores),
-      weeklyScores,
-      oppWeeklyScores,
+      weeklyResults,
+      totalPointsFor: sumBy(weeklyResults, "pointsFor"),
+      totalPointsAgainst: sumBy(weeklyResults, "pointsAgainst"),
     };
   });
 
-  return {
-    ownerResults,
-  };
+  return ownerResults;
 };
 
 const create = async (id: string, platform: Platform) => {

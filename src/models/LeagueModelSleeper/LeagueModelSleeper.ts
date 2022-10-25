@@ -28,17 +28,20 @@ const transformResponse = (settings: RawSleeperSettings): Partial<Settings> => {
 };
 
 // this looks very similar to code above
-const transformMatchup = (matchup: RawSleeperMatchup): Matchup => {
-  return {
-    startersPoints: matchup.starters_points,
-    starters: matchup.starters,
-    rosterId: matchup.roster_id,
-    points: matchup.points,
-    playersPoints: matchup.players_points,
-    players: matchup.players,
-    matchupId: matchup.matchup_id,
+const transformMatchup =
+  (week: number) =>
+  (matchup: RawSleeperMatchup): Matchup => {
+    return {
+      week,
+      startersPoints: matchup.starters_points,
+      starters: matchup.starters,
+      rosterId: matchup.roster_id,
+      points: matchup.points,
+      playersPoints: matchup.players_points,
+      players: matchup.players,
+      matchupId: matchup.matchup_id,
+    };
   };
-};
 
 const transformOwner = (roster: RawSleeperRoster): Owner => {
   return {
@@ -90,7 +93,7 @@ const fetchSleeperMatchup = async (
   const matchups: RawSleeperMatchup[] = await response.json();
   if (response.ok) {
     if (matchups) {
-      return Promise.resolve(matchups.map(transformMatchup));
+      return Promise.resolve(matchups.map(transformMatchup(week)));
     } else {
       return Promise.reject(new Error(`No league found`));
     }
