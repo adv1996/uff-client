@@ -3,8 +3,8 @@ import {
   League,
   Matchup,
   Owner,
+  OwnerResults,
   Platform,
-  Results,
   Settings,
   User,
 } from "../../interfaces";
@@ -41,7 +41,7 @@ abstract class LeagueModel implements League {
 
   // FUTURE add capability for certain weeks or users (almost like a filter)
   // What other filters would others like to use?
-  getResults(): Results {
+  getResults(): OwnerResults[] {
     return assembleOwnerMatchups(this.users, this.owners, this.matchups);
   }
 }
