@@ -1,7 +1,6 @@
 import groupBy from "lodash/groupBy";
 import keyBy from "lodash/keyBy";
 import mapValues from "lodash/mapvalues";
-import range from "lodash/range";
 import sumBy from "lodash/sumBy";
 import zipWith from "lodash/zipWith";
 import {
@@ -10,6 +9,7 @@ import {
   Owner,
   OwnerResults,
   Platform,
+  transformResponse,
   User,
 } from "../../interfaces";
 import { League } from "../LeagueModel/LeagueModel";
@@ -109,4 +109,23 @@ const create = async (id: string, platform: Platform) => {
   return league;
 };
 
-export { create, createLeagueModel, range, assembleOwnerMatchups };
+const fetchWrapper = async <T, U extends {}>(
+  url: string,
+  transform: transformResponse<T, U>
+): Promise<U[]> => {
+  const response = await fetch(url);
+  const data = await response.json();
+  if (response.ok) {
+    if (data && Array.isArray(data)) {
+      return Promise.resolve(data.map(transform));
+    } else if (data && !Array.isArray(data)) {
+      return Promise.resolve([data].map(transform));
+    } else {
+      return Promise.reject(new Error(`Not Found`));
+    }
+  } else {
+    return Promise.reject(new Error("Request failed"));
+  }
+};
+
+export { create, createLeagueModel, assembleOwnerMatchups, fetchWrapper };
