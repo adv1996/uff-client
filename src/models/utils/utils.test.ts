@@ -23,11 +23,11 @@ describe("Utilities", () => {
     expect(results.length).toBe(12);
 
     const owner1Results = results[0];
-    expect(owner1Results.pointsFor).toBe(99.08);
-    expect(owner1Results.pointsAgainst).toBe(133.22);
+    expect(owner1Results.totalPointsFor).toBe(99.08);
+    expect(owner1Results.totalPointsAgainst).toBe(133.22);
 
     const owner2Results = results[6];
-    expect(owner2Results.pointsFor).toBe(133.22);
-    expect(owner2Results.pointsAgainst).toBe(99.08);
+    expect(owner2Results.totalPointsFor).toBe(133.22);
+    expect(owner2Results.totalPointsAgainst).toBe(99.08);
   });
 });
