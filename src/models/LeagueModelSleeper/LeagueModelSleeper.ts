@@ -1,6 +1,5 @@
 import range from "lodash/range";
 import { Matchup, Owner, Settings, User } from "../../interfaces";
-import { RawSleeperMatchup } from "../../interfaces/LeagueSleeper.interface";
 import { LeagueModel } from "../LeagueModel/LeagueModel";
 import { fetchWrapper } from "../utils/utils";
 import {
@@ -13,25 +12,6 @@ import {
 const DEV_URL = "http://localhost:3000/api";
 const SLEEPER_URL = "https://api.sleeper.app/v1";
 const BASE_URL = import.meta.env.MODE === "development" ? DEV_URL : SLEEPER_URL;
-
-const fetchSleeperMatchup = async (
-  leagueId: string,
-  week: number
-): Promise<Matchup[]> => {
-  const response = await fetch(
-    `${BASE_URL}/league/${leagueId}/matchups/${week}`
-  );
-  const matchups: RawSleeperMatchup[] = await response.json();
-  if (response.ok) {
-    if (matchups) {
-      return Promise.resolve(matchups.map(transformMatchup(week)));
-    } else {
-      return Promise.reject(new Error(`No league found`));
-    }
-  } else {
-    return Promise.reject(new Error("Request failed"));
-  }
-};
 
 class LeagueModelSleeper extends LeagueModel {
   async initialize(): Promise<void> {
