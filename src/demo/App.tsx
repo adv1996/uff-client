@@ -29,7 +29,7 @@ const App = () => {
   };
 
   const leagueResults = useMemo(() => {
-    return leagues.map((league) => league.getResults().ownerResults);
+    return leagues.map((league) => league.getResults());
   }, [leagues]);
 
   useEffect(() => {
