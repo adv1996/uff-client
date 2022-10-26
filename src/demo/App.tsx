@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { League, LeagueClient, Platform } from "../index";
 import "../index.css";
-import { League, Platform } from "../interfaces";
-import { LeagueClient } from "../models/LeagueClient";
 
 const App = () => {
   const leagueClient = useMemo(() => new LeagueClient(), []);
