@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.1.1](https://github.com/adv1996/uff-client/compare/v1.1.0...v1.1.1) (2022-10-26)
+
+
+### Bug Fixes
+
+* **import:** import exports at the top level ([8de1bfe](https://github.com/adv1996/uff-client/commit/8de1bfe30149c2a02102278bfb7190bf55768a8f))
+* **types:** use appropriate type in demo ([4982b09](https://github.com/adv1996/uff-client/commit/4982b09b88480314683da2a0c28015b903d7bbe3))
+
 ## [1.1.0](https://github.com/adv1996/uff-client/compare/v1.0.0...v1.1.0) (2022-10-25)
 
 
