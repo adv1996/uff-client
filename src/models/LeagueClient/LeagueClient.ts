@@ -6,8 +6,12 @@ class LeagueClient implements ILeagueClient {
   public leagues: League[] = [];
   public subject = new Subject<League[]>();
 
-  async addLeague(id: string, platform: Platform): Promise<void> {
-    const league = await create(id, platform);
+  async addLeague(
+    id: string,
+    platform: Platform,
+    isDevelopment = false
+  ): Promise<void> {
+    const league = await create(id, platform, isDevelopment);
     this.leagues.push(league);
     return this.subject.next(this.leagues);
   }

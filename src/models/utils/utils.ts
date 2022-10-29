@@ -15,13 +15,17 @@ import {
 import { League } from "../LeagueModel/LeagueModel";
 import { LeagueModelSleeper } from "../LeagueModelSleeper";
 
-const createLeagueModel = (id: string, platform: Platform): League => {
+const createLeagueModel = (
+  id: string,
+  platform: Platform,
+  isDevelopment = false
+): League => {
   // there should be only 1 swtich for platform that determines everything else
   switch (platform) {
     case Platform.SLEEPER:
-      return new LeagueModelSleeper(id, platform);
+      return new LeagueModelSleeper(id, platform, isDevelopment);
     case Platform.ESPN:
-      return new LeagueModelSleeper(id, platform);
+      return new LeagueModelSleeper(id, platform, isDevelopment);
   }
 };
 
@@ -103,8 +107,12 @@ const assembleOwnerMatchups = (
   return ownerResults;
 };
 
-const create = async (id: string, platform: Platform) => {
-  let league = createLeagueModel(id, platform);
+const create = async (
+  id: string,
+  platform: Platform,
+  isDevelopment = false
+) => {
+  let league = createLeagueModel(id, platform, isDevelopment);
   await league.initialize();
   return league;
 };

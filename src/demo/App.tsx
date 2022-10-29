@@ -7,10 +7,15 @@ const App = () => {
   const [leagues, setLeagues] = useState<League[]>([]);
   const [value, setValue] = useState("demo");
   const [weeks, setWeeks] = useState("2");
+  const [checked, setChecked] = useState(false);
+
+  const handleChange = () => {
+    setChecked(!checked);
+  };
 
   const fetchLeague = useCallback(async () => {
-    await leagueClient.addLeague(value, Platform.SLEEPER);
-  }, [leagueClient, value]);
+    await leagueClient.addLeague(value, Platform.SLEEPER, checked);
+  }, [leagueClient, value, checked]);
 
   const fetchMatchups = useCallback(
     async (league: League) => {
@@ -82,6 +87,14 @@ const App = () => {
               >
                 Add League
               </button>
+              <label>
+                <input
+                  type="checkbox"
+                  checked={checked}
+                  onChange={handleChange}
+                />
+                Is Development
+              </label>
             </div>
             <div className="tw-mt-4">
               <p>Added Leagues</p>

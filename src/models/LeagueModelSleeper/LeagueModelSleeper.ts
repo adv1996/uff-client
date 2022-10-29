@@ -1,5 +1,5 @@
 import range from "lodash/range";
-import { Matchup, Owner, Settings, User } from "../../interfaces";
+import { Matchup, Owner, Settings, User, WithPrefix } from "../../interfaces";
 import { LeagueModel } from "../LeagueModel/LeagueModel";
 import { fetchWrapper } from "../utils/utils";
 import {
@@ -11,11 +11,15 @@ import {
 
 const DEV_URL = "http://localhost:3000/api";
 const SLEEPER_URL = "https://api.sleeper.app/v1";
-const BASE_URL = import.meta.env.MODE === "development" ? DEV_URL : SLEEPER_URL;
 
 class LeagueModelSleeper extends LeagueModel {
+  getBaseURL(): WithPrefix<"http"> {
+    return this.isDevelopment ? DEV_URL : SLEEPER_URL;
+  }
+
   async initialize(): Promise<void> {
     const { id } = this.settings;
+    const BASE_URL = this.getBaseURL();
     // what if this isn't a real league -> need to gracefully handle errors
     // TODO handle errors what if one of them fails?
     const settings: Partial<Settings>[] = await fetchWrapper(
@@ -40,6 +44,7 @@ class LeagueModelSleeper extends LeagueModel {
 
   async retrieveMatchups(start: number, end: number): Promise<Matchup[][]> {
     const { id } = this.settings;
+    const BASE_URL = this.getBaseURL();
     const matchupRange = range(start, end);
     const matchups = matchupRange.map((week) => {
       if (week in this.matchups) {

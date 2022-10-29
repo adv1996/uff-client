@@ -15,8 +15,14 @@ abstract class LeagueModel implements League {
   public matchups: Record<number, Matchup[]> = {};
   public owners: Owner[] = [];
   public users: User[] = [];
-  constructor(id: string, platform: Platform) {
+  public isDevelopment: boolean;
+
+  constructor(id: string, platform: Platform, isDevelopment = false) {
     this.settings = { id, platform };
+    this.isDevelopment = isDevelopment;
+  }
+  getBaseURL(): `http${string}` {
+    throw new Error("Method not implemented.");
   }
 
   setSettings(settings: Partial<Settings>): void {
