@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.0](https://github.com/adv1996/uff-client/compare/v1.1.1...v1.2.0) (2022-10-29)
+
+
+### Features
+
+* **workflow:** latest version ([9596dd7](https://github.com/adv1996/uff-client/commit/9596dd7ba46a0ca8a3d557c0051d0e6a385d56e5))
+
 ## [1.1.1](https://github.com/adv1996/uff-client/compare/v1.1.0...v1.1.1) (2022-10-26)
 
 
