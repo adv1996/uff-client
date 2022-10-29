@@ -6,5 +6,8 @@
     "ecmaVersion": 2020,
     "project": ["tsconfig.json"],
     "sourceType": "module"
+  },
+  "rules": {
+    "no-console": 2
   }
 }
