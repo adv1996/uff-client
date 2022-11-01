@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.0](https://github.com/adv1996/uff-client/compare/v1.2.0...v1.3.0) (2022-11-01)
+
+
+### Features
+
+* **csv:** download results into csv ([#7](https://github.com/adv1996/uff-client/issues/7)) ([b659cd9](https://github.com/adv1996/uff-client/commit/b659cd9360a9749232c643b5830c7824b84fb8a0))
+
 ## [1.2.0](https://github.com/adv1996/uff-client/compare/v1.1.1...v1.2.0) (2022-10-29)
 
 
