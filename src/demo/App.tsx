@@ -122,6 +122,15 @@ const App = () => {
                       >
                         Remove
                       </button>
+                      <a
+                        href={`data:text/csv;charset=utf-8,${league.downloadResults()}`}
+                        className="tw-bg-yellow-200 tw-px-2 tw-border tw-border-black"
+                        target={"_blank"}
+                        rel="noreferrer"
+                        download={`${league.settings.id}.csv`}
+                      >
+                        Download
+                      </a>
                     </div>
                   );
                 })}

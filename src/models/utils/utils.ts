@@ -90,6 +90,7 @@ const assembleOwnerMatchups = (
     const oppMatchups = opponentMatchupsMap[rosterId];
     const weeklyResults = zipWith(matchups, oppMatchups, (team1, team2) => {
       return {
+        matchupId: team1.matchupId,
         week: team1.week,
         pointsFor: team1.points,
         pointsAgainst: team2.points,
@@ -136,4 +137,43 @@ const fetchWrapper = async <T, U extends {}>(
   }
 };
 
-export { create, createLeagueModel, assembleOwnerMatchups, fetchWrapper };
+const csv = (rows: string[][]) => {
+  const csvReady = rows.map((row) => row.join(",")).join("\n");
+  return csvReady;
+};
+
+// TODO add unit test
+const generateCSV = (results: OwnerResults[]) => {
+  const transformedResult = results
+    .map((result) => {
+      return result.weeklyResults.map((weeklyResult) => {
+        return {
+          displayName: result.user.displayName,
+          teamName: result.user.teamName,
+          userId: result.user.userId,
+          ...weeklyResult,
+        };
+      });
+    })
+    .flat();
+
+  const rowData = transformedResult.map((_key, index) =>
+    Object.values(transformedResult[index]).map(String)
+  );
+  if (results.length === 0) {
+    return "";
+  }
+  const csvData = csv([Object.keys(transformedResult[0])]).concat(
+    `\n`,
+    csv(rowData)
+  );
+  return encodeURIComponent(csvData);
+};
+
+export {
+  create,
+  createLeagueModel,
+  assembleOwnerMatchups,
+  fetchWrapper,
+  generateCSV,
+};

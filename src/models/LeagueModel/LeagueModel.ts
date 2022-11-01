@@ -8,7 +8,7 @@ import {
   Settings,
   User,
 } from "../../interfaces";
-import { assembleOwnerMatchups } from "../utils/utils";
+import { assembleOwnerMatchups, generateCSV } from "../utils/utils";
 
 abstract class LeagueModel implements League {
   public settings: AtLeast<Settings, "id" | "platform">;
@@ -49,6 +49,11 @@ abstract class LeagueModel implements League {
   // What other filters would others like to use?
   getResults(): OwnerResults[] {
     return assembleOwnerMatchups(this.users, this.owners, this.matchups);
+  }
+
+  downloadResults(): string {
+    const results = this.getResults();
+    return generateCSV(results);
   }
 }
 

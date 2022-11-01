@@ -7,6 +7,7 @@ export enum OUTCOME {
 }
 
 interface WeeklyResults {
+  matchupId: number;
   week: number;
   pointsFor: number;
   pointsAgainst: number;
