@@ -31,5 +31,6 @@ export interface League {
   initialize(): Promise<void>;
   retrieveMatchups(start: number, end: number): Promise<Matchup[][]>;
   getResults(): OwnerResults[];
+  downloadResults(): string;
   getBaseURL(): WithPrefix<"http">;
 }
