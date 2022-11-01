@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.0](https://github.com/adv1996/uff-client/compare/v1.3.0...v1.4.0) (2022-11-01)
+
+
+### Features
+
+* **playerdata:** added python pipeline code ([a6588de](https://github.com/adv1996/uff-client/commit/a6588de03084367624e869df221f13df2c7f1c59))
+
 ## [1.3.0](https://github.com/adv1996/uff-client/compare/v1.2.0...v1.3.0) (2022-11-01)
 
 
