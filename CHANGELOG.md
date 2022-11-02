@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.5.0](https://github.com/adv1996/uff-client/compare/v1.4.0...v1.5.0) (2022-11-02)
+
+
+### Features
+
+* **players:** stitch player roster ([f4501f0](https://github.com/adv1996/uff-client/commit/f4501f0001e940d680b7145b1ef4091d5557b7f0))
+
+
+### Bug Fixes
+
+* **prettier:** update config ([2f0a4fb](https://github.com/adv1996/uff-client/commit/2f0a4fbebadd20a4ce9a3330a7536f3679888340))
+
 ## [1.4.0](https://github.com/adv1996/uff-client/compare/v1.3.0...v1.4.0) (2022-11-01)
 
 
