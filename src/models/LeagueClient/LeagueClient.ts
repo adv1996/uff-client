@@ -1,8 +1,12 @@
 import { Subject } from "rxjs";
 import { ILeagueClient, League, Platform } from "../../interfaces";
+import { Player } from "../../interfaces/Player.interface";
 import { create } from "../utils";
 
+const PLAYERS_URL =
+  "https://raw.githubusercontent.com/adv1996/uff-client/main/pipeline/players.json";
 class LeagueClient implements ILeagueClient {
+  public players: Player[] = [];
   public leagues: League[] = [];
   public subject = new Subject<League[]>();
 
@@ -43,6 +47,21 @@ class LeagueClient implements ILeagueClient {
     return this.subject.next(this.leagues);
   }
 
+  // should this use the consolidate fetchWrapper func?
+  async loadPlayers(): Promise<Player[]> {
+    const response = await fetch(PLAYERS_URL);
+    const data = await response.json();
+    if (response.ok) {
+      if (data && Array.isArray(data)) {
+        this.players = data;
+        return Promise.resolve(data);
+      } else {
+        return Promise.reject(new Error(`Not Found`));
+      }
+    } else {
+      return Promise.reject(new Error("Request failed"));
+    }
+  }
   onMessage() {
     return this.subject.asObservable();
   }

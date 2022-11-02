@@ -24,7 +24,8 @@ def retrievePlayerData(player):
     'firstName': player['first_name'],
     'lastName': player['last_name'],
     'positions': player['fantasy_positions'],
-    'team': player['team']
+    'team': player['team'],
+    'id': player['player_id']
   }
 
 def main():

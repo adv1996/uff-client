@@ -7,8 +7,10 @@ import {
   Settings,
   WithPrefix,
 } from ".";
+import { Player } from "./Player.interface";
 
 export interface ILeagueClient {
+  players: Player[];
   leagues: League[];
   addLeague(
     id: string,
@@ -21,6 +23,7 @@ export interface ILeagueClient {
     start: number,
     end: number
   ): Promise<void>;
+  loadPlayers(): Promise<Player[]>;
 }
 
 export interface League {
@@ -30,7 +33,7 @@ export interface League {
   isDevelopment: boolean;
   initialize(): Promise<void>;
   retrieveMatchups(start: number, end: number): Promise<Matchup[][]>;
-  getResults(): OwnerResults[];
-  downloadResults(): string;
+  getResults(players: Player[]): OwnerResults[];
+  downloadResults(players: Player[]): string;
   getBaseURL(): WithPrefix<"http">;
 }

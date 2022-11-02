@@ -1,3 +1,4 @@
+import { Dictionary, xor, zip } from "lodash";
 import groupBy from "lodash/groupBy";
 import keyBy from "lodash/keyBy";
 import mapValues from "lodash/mapvalues";
@@ -9,9 +10,11 @@ import {
   Owner,
   OwnerResults,
   Platform,
+  RosterPlayer,
   transformResponse,
   User,
 } from "../../interfaces";
+import { Player } from "../../interfaces/Player.interface";
 import { League } from "../LeagueModel/LeagueModel";
 import { LeagueModelSleeper } from "../LeagueModelSleeper";
 
@@ -47,16 +50,76 @@ const calculateOutcome = (pointsA = 0, pointsB = 0): OUTCOME => {
   return OUTCOME.TIE;
 };
 
+const getPlayerMetaData = (
+  playerMap: Dictionary<Player>,
+  id: string | undefined
+) => {
+  let playerMetaData: Player = {
+    id: null,
+    firstName: "",
+    lastName: "",
+    positions: [],
+    team: null,
+  };
+  if (id && id in playerMap) {
+    playerMetaData = playerMap[id];
+  }
+  return playerMetaData;
+};
+
+const createRoster = (
+  playerMap: Dictionary<Player>,
+  starterIds: string[],
+  starterPoints: number[],
+  rosterIds: string[],
+  rosterPoints: Record<string, number>
+): RosterPlayer[] => {
+  const starterPointsIds = zip(starterIds, starterPoints);
+  const starters = starterPointsIds.map((data) => {
+    const playerMetaData = getPlayerMetaData(playerMap, data[0]);
+    return {
+      id: data[0] || "missing",
+      points: data[1] || 0,
+      isStarter: true,
+      firstName: playerMetaData.firstName,
+      lastName: playerMetaData.lastName,
+      team: playerMetaData.team || "missing",
+      fantasyPosition: playerMetaData.positions,
+      positions: playerMetaData.positions,
+    };
+  });
+
+  const bench: RosterPlayer[] = xor(starterIds, rosterIds).map((id) => {
+    const playerMetaData = getPlayerMetaData(playerMap, id);
+    return {
+      id: playerMetaData.id,
+      points: id in rosterPoints ? rosterPoints[id] : 0,
+      isStarter: true,
+      firstName: playerMetaData.firstName,
+      lastName: playerMetaData.lastName,
+      team: playerMetaData.team || "missing",
+      fantasyPosition: playerMetaData.positions,
+      positions: playerMetaData.positions,
+    };
+  });
+
+  return [...starters, ...bench];
+};
+
 const assembleOwnerMatchups = (
   users: User[],
   owners: Owner[],
-  matchups: Record<number, Matchup[]>
+  matchups: Record<number, Matchup[]>,
+  players: Player[]
 ): OwnerResults[] => {
   const rosterMap = buildRosterUserMap(users, owners);
   const weeks = Object.keys(matchups);
   const ownerMatchupsMap: Record<number, Matchup[]> = {};
   const opponentMatchupsMap: Record<number, Matchup[]> = {};
 
+  const playerMap = keyBy(players, "id");
+  // eslint-disable-next-line no-console
+  console.log(playerMap, players);
   weeks.forEach((week) => {
     const weekMatchups = matchups[parseInt(week)];
 
@@ -95,6 +158,13 @@ const assembleOwnerMatchups = (
         pointsFor: team1.points,
         pointsAgainst: team2.points,
         outcome: calculateOutcome(team1.points, team2.points),
+        roster: createRoster(
+          playerMap,
+          team1.starters,
+          team1.startersPoints,
+          team1.players,
+          team1.playersPoints
+        ),
       };
     });
     return {

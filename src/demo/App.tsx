@@ -8,6 +8,7 @@ const App = () => {
   const [value, setValue] = useState("demo");
   const [weeks, setWeeks] = useState("2");
   const [checked, setChecked] = useState(false);
+  const [isLoading, setLoading] = useState(false);
 
   const handleChange = () => {
     setChecked(!checked);
@@ -33,18 +34,30 @@ const App = () => {
   };
 
   const leagueResults = useMemo(() => {
-    return leagues.map((league) => league.getResults());
-  }, [leagues]);
+    return leagues.map((league) => league.getResults(leagueClient.players));
+  }, [leagues, leagueClient.players]);
 
   useEffect(() => {
     const subscription = leagueClient.onMessage().subscribe((value) => {
       setLeagues([...value]);
+    });
+    setLoading(true);
+
+    // load players for assigning player ids to real names and teams
+    leagueClient.loadPlayers().then(() => {
+      setLoading(false);
     });
     return () => {
       subscription.unsubscribe();
     };
   }, [leagueClient]);
 
+  const downloadResults = useCallback(
+    (league: League) => {
+      return () => league.downloadResults(leagueClient.players);
+    },
+    [leagueClient.players]
+  );
   return (
     <main>
       <div className="tw-p-4">
@@ -81,12 +94,14 @@ const App = () => {
                 onChange={(e) => setValue(e.target.value)}
                 value={value}
               />
-              <button
-                className="tw-bg-green-200 tw-px-2 tw-border tw-border-black"
-                onClick={fetchLeague}
-              >
-                Add League
-              </button>
+              {!isLoading && (
+                <button
+                  className="tw-bg-green-200 tw-px-2 tw-border tw-border-black"
+                  onClick={fetchLeague}
+                >
+                  Add League
+                </button>
+              )}
               <label>
                 <input
                   type="checkbox"
@@ -123,7 +138,9 @@ const App = () => {
                         Remove
                       </button>
                       <a
-                        href={`data:text/csv;charset=utf-8,${league.downloadResults()}`}
+                        href={`data:text/csv;charset=utf-8,${downloadResults(
+                          league
+                        )}`}
                         className="tw-bg-yellow-200 tw-px-2 tw-border tw-border-black"
                         target={"_blank"}
                         rel="noreferrer"
@@ -137,7 +154,20 @@ const App = () => {
               </ol>
               {leagueResults.map((result, index) => {
                 return result.map((r, i) => {
-                  return <p key={`${index}-${i}`}>{r.user.displayName}</p>;
+                  return (
+                    <div key={`${index}-${i}`}>
+                      <p>{r.user.displayName}</p>
+                      {r.weeklyResults.map((week) => {
+                        return week.roster.map((player) => {
+                          return (
+                            <p key={`${player.id}-${week.week}`}>
+                              {`${player.firstName}-${player.lastName}`}
+                            </p>
+                          );
+                        });
+                      })}
+                    </div>
+                  );
                 });
               })}
             </div>
