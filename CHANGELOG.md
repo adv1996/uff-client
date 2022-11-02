@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.5.1](https://github.com/adv1996/uff-client/compare/v1.5.0...v1.5.1) (2022-11-02)
+
+
+### Bug Fixes
+
+* **bench:** change bench isStarter to false ([a899c32](https://github.com/adv1996/uff-client/commit/a899c323ef35a8750cb122ab5770de19bc770966))
+
 ## [1.5.0](https://github.com/adv1996/uff-client/compare/v1.4.0...v1.5.0) (2022-11-02)
 
 
