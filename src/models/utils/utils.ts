@@ -94,7 +94,7 @@ const createRoster = (
     return {
       id: playerMetaData.id,
       points: id in rosterPoints ? rosterPoints[id] : 0,
-      isStarter: true,
+      isStarter: false,
       firstName: playerMetaData.firstName,
       lastName: playerMetaData.lastName,
       team: playerMetaData.team || "missing",
@@ -118,8 +118,7 @@ const assembleOwnerMatchups = (
   const opponentMatchupsMap: Record<number, Matchup[]> = {};
 
   const playerMap = keyBy(players, "id");
-  // eslint-disable-next-line no-console
-  console.log(playerMap, players);
+
   weeks.forEach((week) => {
     const weekMatchups = matchups[parseInt(week)];
 
@@ -217,11 +216,12 @@ const generateCSV = (results: OwnerResults[]) => {
   const transformedResult = results
     .map((result) => {
       return result.weeklyResults.map((weeklyResult) => {
+        const { roster, ...results } = weeklyResult;
         return {
           displayName: result.user.displayName,
           teamName: result.user.teamName,
           userId: result.user.userId,
-          ...weeklyResult,
+          ...results,
         };
       });
     })

@@ -157,15 +157,6 @@ const App = () => {
                   return (
                     <div key={`${index}-${i}`}>
                       <p>{r.user.displayName}</p>
-                      {r.weeklyResults.map((week) => {
-                        return week.roster.map((player) => {
-                          return (
-                            <p key={`${player.id}-${week.week}`}>
-                              {`${player.firstName}-${player.lastName}`}
-                            </p>
-                          );
-                        });
-                      })}
                     </div>
                   );
                 });
