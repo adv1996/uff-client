@@ -14,10 +14,8 @@ def readFile(filename):
 def fetchPlayersData():
   response = requests.get(SLEEPER_PLAYERS_URL)
   data = response.json()
-  saveFile(data, "rawPlayers.json")
-
-def transformPlayers():
-  return 0
+  # saveFile(data, "rawPlayers.json")
+  return data
 
 def retrievePlayerData(player):
   return {
@@ -29,7 +27,8 @@ def retrievePlayerData(player):
   }
 
 def main():
-  data = readFile("rawPlayers.json")
+  data = fetchPlayersData() # USE IN PRODUCTION
+  # data = readFile("rawPlayers.json")  # USE FOR LOCAL TESTING
   playerIds = list(data.keys())
   players = list(map(lambda n: retrievePlayerData(data[n]), playerIds))
   saveFile(players, 'players.json')
