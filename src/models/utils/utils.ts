@@ -1,22 +1,25 @@
-import { Dictionary, xor, zip } from "lodash";
-import groupBy from "lodash/groupBy";
-import keyBy from "lodash/keyBy";
-import mapValues from "lodash/mapvalues";
-import sumBy from "lodash/sumBy";
-import zipWith from "lodash/zipWith";
 import {
   Matchup,
   OUTCOME,
   Owner,
   OwnerResults,
   Platform,
+  Player,
   RosterPlayer,
   transformResponse,
   User,
-} from "../../interfaces";
-import { Player } from "../../interfaces/Player.interface";
+} from "@/interfaces";
+import { Dictionary, pick } from "lodash";
+import groupBy from "lodash/groupBy";
+import keyBy from "lodash/keyBy";
+import mapValues from "lodash/mapvalues";
+import sumBy from "lodash/sumBy";
+import xor from "lodash/xor";
+import zip from "lodash/zip";
+import zipWith from "lodash/zipWith";
 import { League } from "../LeagueModel/LeagueModel";
 import { LeagueModelSleeper } from "../LeagueModelSleeper";
+import { columns, MISSING } from "./constants";
 
 const createLeagueModel = (
   id: string,
@@ -55,11 +58,11 @@ const getPlayerMetaData = (
   id: string | undefined
 ) => {
   let playerMetaData: Player = {
-    id: null,
-    firstName: "",
-    lastName: "",
+    id: MISSING.PLAYER_ID,
+    firstName: MISSING.FIRST_NAME,
+    lastName: MISSING.LAST_NAME,
     positions: [],
-    team: null,
+    team: MISSING.TEAM_NAME,
   };
   if (id && id in playerMap) {
     playerMetaData = playerMap[id];
@@ -78,12 +81,12 @@ const createRoster = (
   const starters = starterPointsIds.map((data) => {
     const playerMetaData = getPlayerMetaData(playerMap, data[0]);
     return {
-      id: data[0] || "missing",
+      id: data[0] || MISSING.PLAYER_ID,
       points: data[1] || 0,
       isStarter: true,
       firstName: playerMetaData.firstName,
       lastName: playerMetaData.lastName,
-      team: playerMetaData.team || "missing",
+      team: playerMetaData.team || MISSING.TEAM_NAME,
       fantasyPosition: playerMetaData.positions,
       positions: playerMetaData.positions,
     };
@@ -217,26 +220,26 @@ const generateCSV = (results: OwnerResults[]) => {
     .map((result) => {
       return result.weeklyResults.map((weeklyResult) => {
         const { roster, ...results } = weeklyResult;
-        return {
-          displayName: result.user.displayName,
-          teamName: result.user.teamName,
-          userId: result.user.userId,
-          ...results,
-        };
+        return pick(
+          {
+            displayName: result.user.displayName,
+            teamName: result.user.teamName,
+            userId: result.user.userId,
+            ...results,
+          },
+          columns
+        );
       });
     })
     .flat();
 
-  const rowData = transformedResult.map((_key, index) =>
-    Object.values(transformedResult[index]).map(String)
-  );
-  if (results.length === 0) {
-    return "";
-  }
-  const csvData = csv([Object.keys(transformedResult[0])]).concat(
-    `\n`,
-    csv(rowData)
-  );
+  const rowData = transformedResult.map((_key, index) => {
+    const result = transformedResult[index];
+    if (result) return Object.values(result).map(String);
+    return [];
+  });
+
+  const csvData = csv([columns]).concat(`\n`, csv(rowData));
   return encodeURIComponent(csvData);
 };
 

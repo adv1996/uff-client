@@ -52,9 +52,9 @@ const App = () => {
     };
   }, [leagueClient]);
 
-  const downloadResults = useCallback(
+  const getResultsCSV = useCallback(
     (league: League) => {
-      return () => league.downloadResults(leagueClient.players);
+      return () => league.getResultsCSV(leagueClient.players);
     },
     [leagueClient.players]
   );
@@ -138,7 +138,7 @@ const App = () => {
                         Remove
                       </button>
                       <a
-                        href={`data:text/csv;charset=utf-8,${downloadResults(
+                        href={`data:text/csv;charset=utf-8,${getResultsCSV(
                           league
                         )}`}
                         className="tw-bg-yellow-200 tw-px-2 tw-border tw-border-black"
