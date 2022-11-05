@@ -4,10 +4,11 @@ import {
   Owner,
   OwnerResults,
   Platform,
+  Player,
   Settings,
+  User,
   WithPrefix,
 } from ".";
-import { Player } from "./Player.interface";
 
 export interface ILeagueClient {
   players: Player[];
@@ -28,12 +29,13 @@ export interface ILeagueClient {
 
 export interface League {
   settings: AtLeast<Settings, "id" | "platform">;
+  users: User[];
   matchups: Record<number, Matchup[]>;
   owners: Owner[];
   isDevelopment: boolean;
   initialize(): Promise<void>;
   retrieveMatchups(start: number, end: number): Promise<Matchup[][]>;
   getResults(players: Player[]): OwnerResults[];
-  downloadResults(players: Player[]): string;
+  getResultsCSV(players: Player[]): string;
   getBaseURL(): WithPrefix<"http">;
 }
