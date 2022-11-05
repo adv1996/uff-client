@@ -1,5 +1,22 @@
 # Changelog
 
+## [1.6.0](https://github.com/adv1996/uff-client/compare/v1.5.1...v1.6.0) (2022-11-05)
+
+
+### Features
+
+* **players:** update players json with github actions ([9305d31](https://github.com/adv1996/uff-client/commit/9305d3112cc5f5b17383383799b83d4e540135fe))
+* **players:** update players json with github actions ([892f857](https://github.com/adv1996/uff-client/commit/892f857d5a6519a1ac43f3948ca2154a83e770c3))
+* **players:** update players json with github actions - update cron ([7124bf7](https://github.com/adv1996/uff-client/commit/7124bf7c30d1207a01f6a115a8860a5a1b3c1590))
+* **players:** update players json with github actions - update cron again ([49c7b59](https://github.com/adv1996/uff-client/commit/49c7b599329c57bd07a0f2297843e560fa9ca70a))
+* **players:** update players json with github actions - update cron again and again ([7840c89](https://github.com/adv1996/uff-client/commit/7840c89f7c696a0cfc8aceea592aeff63abfc43e))
+* **players:** update players json with github actions - update cron again and again ([3dc6161](https://github.com/adv1996/uff-client/commit/3dc61612676f94fe7da0044bab68280f52446cda))
+
+
+### Bug Fixes
+
+* **update:** cron to use latest main ([#13](https://github.com/adv1996/uff-client/issues/13)) ([e5fb180](https://github.com/adv1996/uff-client/commit/e5fb18095876cd5223eef43ffc3cd09f747f82b1))
+
 ## [1.5.1](https://github.com/adv1996/uff-client/compare/v1.5.0...v1.5.1) (2022-11-02)
 
 

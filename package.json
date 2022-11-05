@@ -1,7 +1,7 @@
 {
   "name": "uff-client",
   "private": true,
-  "version": "1.5.1",
+  "version": "1.6.0",
   "type": "module",
   "exports": {
     "import": "./dist/uff-client.es.js",
@@ -19,7 +19,7 @@
     "preview": "vite preview",
     "dev:api": "json-server ./src/test_utils/db.json --routes ./src/test_utils/routes.json",
     "test": "vitest run",
-    "lint": "yarn lint:eslint && yarn lint:prettier",
+    "lint": "yarn lint:eslint && yarn lint:prettier && yarn lint:type",
     "lint:prettier": "prettier --check '**/*.{ts,tsx,json}'",
     "lint:eslint": "eslint .",
     "lint:type": "tsc; rm -rf types",

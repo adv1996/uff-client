@@ -3,7 +3,6 @@ import { afterAll, afterEach, beforeAll, describe, expect, it } from "vitest";
 import { Platform } from "../../interfaces";
 import MockServer from "../../test_utils/MockServer";
 import { create } from "./";
-import { createLeagueModel } from "./utils";
 
 describe("Utilities", () => {
   beforeAll(() => MockServer.listen());
@@ -30,13 +29,5 @@ describe("Utilities", () => {
     const owner2Results = results[6];
     expect(owner2Results.totalPointsFor).toBe(133.22);
     expect(owner2Results.totalPointsAgainst).toBe(99.08);
-  });
-
-  it("should generate csv correctly", async () => {
-    const league = createLeagueModel("test", Platform.SLEEPER);
-    // MOCK USERS, SETTINGS, MATCHUPS, PLAYERS and test
-    // check if csv is generated properly
-    // next up -> getResults with players data is correct -> also check for missing players
-    expect(league.settings.id).toBe("test");
   });
 });

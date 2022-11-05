@@ -57,7 +57,7 @@ abstract class LeagueModel implements League {
     );
   }
 
-  downloadResults(players: Player[]): string {
+  getResultsCSV(players: Player[]): string {
     const results = this.getResults(players);
     return generateCSV(results);
   }

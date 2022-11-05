@@ -1,8 +1,8 @@
+import { ILeagueClient, League, Platform, Player } from "@/interfaces";
 import { Subject } from "rxjs";
-import { ILeagueClient, League, Platform } from "../../interfaces";
-import { Player } from "../../interfaces/Player.interface";
 import { create } from "../utils";
 
+// TODO move to constants file
 const PLAYERS_URL =
   "https://raw.githubusercontent.com/adv1996/uff-client/main/pipeline/players.json";
 class LeagueClient implements ILeagueClient {
