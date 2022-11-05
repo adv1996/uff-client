@@ -54,7 +54,7 @@ const App = () => {
 
   const downloadResults = useCallback(
     (league: League) => {
-      return () => league.downloadResults(leagueClient.players);
+      return () => league.getResultsCSV(leagueClient.players);
     },
     [leagueClient.players]
   );
