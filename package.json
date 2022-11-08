@@ -22,7 +22,7 @@
     "lint": "yarn lint:eslint && yarn lint:prettier && yarn lint:type",
     "lint:prettier": "prettier --check '**/*.{ts,tsx,json}'",
     "lint:eslint": "eslint .",
-    "lint:type": "tsc; rm -rf types",
+    "lint:type": "tsc",
     "lint:fix": "eslint --fix . && prettier --write '**/*.{ts,tsx,json}'",
     "prepare": "husky install"
   },

@@ -2,3 +2,5 @@ dist
 vite.config.ts
 tailwind.config.cjs
 postcss.config.cjs
+node_modules
+pipeline

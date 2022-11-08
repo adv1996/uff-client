@@ -10,7 +10,7 @@ export enum OUTCOME {
 export interface RosterPlayer extends Player {
   isStarter: boolean;
   points: number;
-  fantasyPosition: string[]; // TODO change to enum...
+  fantasyPosition: string;
 }
 
 interface WeeklyResults {

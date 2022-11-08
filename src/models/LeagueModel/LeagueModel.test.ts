@@ -83,6 +83,7 @@ describe("League Model", () => {
 
   const setupLeague = () => {
     const league = createLeagueModel("test", Platform.SLEEPER);
+    league.settings.rosterPositions = ["QB", "BN"];
     league.users = users;
     league.owners = owners;
     league.matchups = [matchups];
@@ -132,5 +133,8 @@ describe("League Model", () => {
       "SNL",
       "POTUS",
     ]);
+    expect(
+      week1Team1Results.map((roster) => roster.fantasyPosition)
+    ).toStrictEqual(["QB", "BN"]);
   });
 });

@@ -75,34 +75,30 @@ const createRoster = (
   starterIds: string[],
   starterPoints: number[],
   rosterIds: string[],
-  rosterPoints: Record<string, number>
+  rosterPoints: Record<string, number>,
+  rosterPositions: string[]
 ): RosterPlayer[] => {
-  const starterPointsIds = zip(starterIds, starterPoints);
+  const starterPositions = rosterPositions.filter(
+    (position) => position !== "BN"
+  );
+  const starterPointsIds = zip(starterIds, starterPoints, starterPositions);
   const starters = starterPointsIds.map((data) => {
     const playerMetaData = getPlayerMetaData(playerMap, data[0]);
     return {
-      id: data[0] || MISSING.PLAYER_ID,
+      ...playerMetaData,
       points: data[1] || 0,
       isStarter: true,
-      firstName: playerMetaData.firstName,
-      lastName: playerMetaData.lastName,
-      team: playerMetaData.team || MISSING.TEAM_NAME,
-      fantasyPosition: playerMetaData.positions,
-      positions: playerMetaData.positions,
+      fantasyPosition: data[2] || "ST", //TODO make this a special case if we can't zip
     };
   });
 
   const bench: RosterPlayer[] = xor(starterIds, rosterIds).map((id) => {
     const playerMetaData = getPlayerMetaData(playerMap, id);
     return {
-      id: playerMetaData.id,
+      ...playerMetaData,
       points: id in rosterPoints ? rosterPoints[id] : 0,
       isStarter: false,
-      firstName: playerMetaData.firstName,
-      lastName: playerMetaData.lastName,
-      team: playerMetaData.team || "missing",
-      fantasyPosition: playerMetaData.positions,
-      positions: playerMetaData.positions,
+      fantasyPosition: "BN",
     };
   });
 
@@ -113,7 +109,8 @@ const assembleOwnerMatchups = (
   users: User[],
   owners: Owner[],
   matchups: Record<number, Matchup[]>,
-  players: Player[]
+  players: Player[],
+  rosterPositions: string[]
 ): OwnerResults[] => {
   const rosterMap = buildRosterUserMap(users, owners);
   const weeks = Object.keys(matchups);
@@ -165,7 +162,8 @@ const assembleOwnerMatchups = (
           team1.starters,
           team1.startersPoints,
           team1.players,
-          team1.playersPoints
+          team1.playersPoints,
+          rosterPositions
         ),
       };
     });
