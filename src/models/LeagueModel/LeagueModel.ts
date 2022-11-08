@@ -53,7 +53,8 @@ abstract class LeagueModel implements League {
       this.users,
       this.owners,
       this.matchups,
-      players
+      players,
+      this.settings.rosterPositions || []
     );
   }
 
