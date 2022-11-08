@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.7.0](https://github.com/adv1996/uff-client/compare/v1.6.0...v1.7.0) (2022-11-08)
+
+
+### Features
+
+* **fantasy-position:** support for starter roster position ([#16](https://github.com/adv1996/uff-client/issues/16)) ([3d0e0ac](https://github.com/adv1996/uff-client/commit/3d0e0ac8d0975da665cd49ed79f6644ec711f37a))
+
+
+### Bug Fixes
+
+* **demo:** updated demo link ([21d0780](https://github.com/adv1996/uff-client/commit/21d0780b53a31641da062b1d082406e82df9e2f7))
+
 ## [1.6.0](https://github.com/adv1996/uff-client/compare/v1.5.1...v1.6.0) (2022-11-05)
 
 
