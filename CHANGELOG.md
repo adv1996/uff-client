@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.8.0](https://github.com/adv1996/uff-client/compare/v1.7.0...v1.8.0) (2022-11-10)
+
+
+### Features
+
+* **local-api:** set up infrastructure to save real league data from external sources locally ([#17](https://github.com/adv1996/uff-client/issues/17)) ([b59470d](https://github.com/adv1996/uff-client/commit/b59470ddd76bd53f47caa6b6f15824d3fdef6418))
+
 ## [1.7.0](https://github.com/adv1996/uff-client/compare/v1.6.0...v1.7.0) (2022-11-08)
 
 
