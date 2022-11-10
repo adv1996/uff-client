@@ -10,8 +10,30 @@ Open demo app to try it out!
 yarn dev
 ```
 
-Run Mock JSON Server
+Run Mock JSON Server. This is used for tests and gets you running with a default "demo" league loaded in.
+
+```
+yarn dev:test-api
+```
+
+If you want to start testing on real leagues and want to seed your mock data with real data use the pipeline scripts to get started.
+
+This is an important workflow to reduce the number of fetches to third parties during development and speeds up local development.
+
+```
+cd pipeline
+python3 -m venv env // create virtual env
+source env/bin/activate // activate virtual env
+pip install requirements.txt // install packages for pipeline scripts
+python league.py {LEAGUE_ID} {STARTWEEK} {ENDWEEK}
+python api.py
+```
+
+Once you complete those steps you should see `db.json` and `routes.json` inside `pipeline/api`.
+You can now run
 
 ```
 yarn dev:api
 ```
+
+to use `json-server` to create an api on saved leagues.

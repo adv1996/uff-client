@@ -25,6 +25,8 @@ dist-ssr
 
 .env
 
+# Python
 env
-
 notebooks
+pipeline/api
+__pycache__
