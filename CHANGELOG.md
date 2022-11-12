@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.9.0](https://github.com/adv1996/uff-client/compare/v1.8.0...v1.9.0) (2022-11-12)
+
+
+### Features
+
+* **development:** local load of development ([#19](https://github.com/adv1996/uff-client/issues/19)) ([0e86751](https://github.com/adv1996/uff-client/commit/0e86751019785e9a1722db17ddfb022f34737b71))
+
 ## [1.8.0](https://github.com/adv1996/uff-client/compare/v1.7.0...v1.8.0) (2022-11-10)
 
 
