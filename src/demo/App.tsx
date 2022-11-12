@@ -44,7 +44,7 @@ const App = () => {
     setLoading(true);
 
     // load players for assigning player ids to real names and teams
-    leagueClient.loadPlayers().then(() => {
+    leagueClient.loadPlayers(true).then(() => {
       setLoading(false);
     });
     return () => {

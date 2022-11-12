@@ -25,7 +25,10 @@ cd pipeline
 python3 -m venv env // create virtual env
 source env/bin/activate // activate virtual env
 pip install requirements.txt // install packages for pipeline scripts
+
+python league.py 784961395996356608 1 10
 python league.py {LEAGUE_ID} {STARTWEEK} {ENDWEEK}
+
 python api.py
 ```
 

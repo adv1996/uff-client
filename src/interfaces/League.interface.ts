@@ -24,7 +24,7 @@ export interface ILeagueClient {
     start: number,
     end: number
   ): Promise<void>;
-  loadPlayers(): Promise<Player[]>;
+  loadPlayers(isDevelopment?: true): Promise<Player[]>;
 }
 
 export interface League {
