@@ -5,6 +5,13 @@ import { create } from "../utils";
 // TODO move to constants file
 const PLAYERS_URL =
   "https://raw.githubusercontent.com/adv1996/uff-client/main/pipeline/players.json";
+
+const loadLocalPlayers = async (): Promise<any> => {
+  return await import("../../../pipeline/players.json").then(
+    (module) => module.default
+  );
+};
+
 class LeagueClient implements ILeagueClient {
   public players: Player[] = [];
   public leagues: League[] = [];
@@ -48,7 +55,10 @@ class LeagueClient implements ILeagueClient {
   }
 
   // should this use the consolidate fetchWrapper func?
-  async loadPlayers(): Promise<Player[]> {
+  async loadPlayers(isDevelopment = false): Promise<Player[]> {
+    if (isDevelopment) {
+      return await loadLocalPlayers();
+    }
     const response = await fetch(PLAYERS_URL);
     const data = await response.json();
     if (response.ok) {

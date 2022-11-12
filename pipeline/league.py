@@ -8,25 +8,25 @@ parser.add_argument('leagueId')
 parser.add_argument('startWeek')
 parser.add_argument('endWeek')
 
-BASE_URL = "https://api.sleeper.app/v1"
+SLEEPER_BASE_URL = "https://api.sleeper.app/v1"
 
 def getSettings(leagueId):
-    response = requests.get(f'{BASE_URL}/league/{leagueId}')
+    response = requests.get(f'{SLEEPER_BASE_URL}/league/{leagueId}')
     data = response.json()
     return data
 
 def getRosters(leagueId):
-    response = requests.get(f'{BASE_URL}/league/{leagueId}/rosters')
+    response = requests.get(f'{SLEEPER_BASE_URL}/league/{leagueId}/rosters')
     data = response.json()
     return data
 
 def getUsers(leagueId):
-    response = requests.get(f'{BASE_URL}/league/{leagueId}/users')
+    response = requests.get(f'{SLEEPER_BASE_URL}/league/{leagueId}/users')
     data = response.json()
     return data
 
 def getMatchup(leagueId, week):
-    response = requests.get(f'{BASE_URL}/league/{leagueId}/matchups/{week}')
+    response = requests.get(f'{SLEEPER_BASE_URL}/league/{leagueId}/matchups/{week}')
     data = response.json()
     return data
 
