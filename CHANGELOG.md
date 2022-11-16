@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.10.0](https://github.com/adv1996/uff-client/compare/v1.9.0...v1.10.0) (2022-11-16)
+
+
+### Features
+
+* **notebooks:** make jupyter notebooks available ([89ad865](https://github.com/adv1996/uff-client/commit/89ad865233e0f282ab2ea3c1e4ece119a03fcd07))
+
 ## [1.9.0](https://github.com/adv1996/uff-client/compare/v1.8.0...v1.9.0) (2022-11-12)
 
 
