@@ -27,6 +27,6 @@ dist-ssr
 
 # Python
 env
-notebooks
 pipeline/api
 __pycache__
+.ipynb_checkpoints

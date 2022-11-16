@@ -14,5 +14,4 @@ export const columns = [
   "pointsFor",
   "pointsAgainst",
   "outcome",
-  "roster",
 ];

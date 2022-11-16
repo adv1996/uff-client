@@ -220,8 +220,8 @@ const generateCSV = (results: OwnerResults[]) => {
         const { roster, ...results } = weeklyResult;
         return pick(
           {
-            displayName: result.user.displayName,
-            teamName: result.user.teamName,
+            displayName: `${result.user.displayName}`,
+            teamName: `"${result.user.teamName}"`,
             userId: result.user.userId,
             ...results,
           },
