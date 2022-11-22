@@ -28,5 +28,8 @@ dist-ssr
 # Python
 env
 pipeline/api
+
+pipeline/leagues/*
+
 __pycache__
 .ipynb_checkpoints
