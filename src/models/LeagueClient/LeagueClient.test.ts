@@ -16,6 +16,7 @@ describe("League Client", () => {
     await client.addLeague("demo", Platform.SLEEPER);
     expect(client.leagues.length).toBe(1);
   });
+
   it("should be able to delete leagues", async () => {
     const client = new LeagueClient();
     await client.addLeague("demo", Platform.SLEEPER);
