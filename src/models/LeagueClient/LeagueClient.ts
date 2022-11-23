@@ -1,4 +1,10 @@
-import { ILeagueClient, League, Platform, Player } from "@/interfaces";
+import {
+  ILeagueClient,
+  League,
+  LeagueState,
+  Platform,
+  Player,
+} from "@/interfaces";
 import { Subject } from "rxjs";
 import { create } from "../utils";
 
@@ -12,10 +18,17 @@ const loadLocalPlayers = async (): Promise<any> => {
   );
 };
 
+const loadLocalState = async (): Promise<any> => {
+  return await import("../../../pipeline/state.json").then(
+    (module) => module.default
+  );
+};
+
 class LeagueClient implements ILeagueClient {
   public players: Player[] = [];
   public leagues: League[] = [];
   public subject = new Subject<League[]>();
+  public state: Partial<LeagueState> = {};
 
   async addLeague(
     id: string,
@@ -57,7 +70,9 @@ class LeagueClient implements ILeagueClient {
   // should this use the consolidate fetchWrapper func?
   async loadPlayers(isDevelopment = false): Promise<Player[]> {
     if (isDevelopment) {
-      return await loadLocalPlayers();
+      const data = await loadLocalPlayers();
+      this.players = data;
+      return data;
     }
     const response = await fetch(PLAYERS_URL);
     const data = await response.json();
@@ -72,6 +87,27 @@ class LeagueClient implements ILeagueClient {
       return Promise.reject(new Error("Request failed"));
     }
   }
+
+  async getLeagueState(isDevelopment = false): Promise<LeagueState> {
+    if (isDevelopment) {
+      const data = await loadLocalState();
+      this.state = data;
+      return data;
+    }
+    const response = await fetch("https://api.sleeper.app/v1/state/nfl");
+    const data = await response.json();
+    if (response.ok) {
+      if (data) {
+        this.state = data;
+        return Promise.resolve(data);
+      } else {
+        return Promise.reject(new Error(`Not Found`));
+      }
+    } else {
+      return Promise.reject(new Error("Request failed"));
+    }
+  }
+
   onMessage() {
     return this.subject.asObservable();
   }

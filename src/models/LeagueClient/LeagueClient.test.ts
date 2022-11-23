@@ -24,4 +24,10 @@ describe("League Client", () => {
     client.removeLeague("demo");
     expect(client.leagues.length).toBe(0);
   });
+
+  it("should fetch current league state locally", async () => {
+    const client = new LeagueClient();
+    await client.getLeagueState(true);
+    expect(client.state.display_week).toBe(11);
+  });
 });

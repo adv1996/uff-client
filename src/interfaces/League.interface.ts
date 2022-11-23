@@ -10,9 +10,20 @@ import {
   WithPrefix,
 } from ".";
 
+export interface LeagueState {
+  week: number;
+  season_type: string;
+  season_start_date: string;
+  season: string;
+  previous_season: string;
+  league_season: "2022";
+  display_week: number;
+}
+
 export interface ILeagueClient {
   players: Player[];
   leagues: League[];
+  state: Partial<LeagueState>;
   addLeague(
     id: string,
     platform: Platform,
@@ -25,6 +36,7 @@ export interface ILeagueClient {
     end: number
   ): Promise<void>;
   loadPlayers(isDevelopment?: true): Promise<Player[]>;
+  getLeagueState(): Promise<LeagueState>;
 }
 
 export interface League {
