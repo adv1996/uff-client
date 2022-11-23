@@ -96,8 +96,6 @@ describe("League Model", () => {
   });
   it("should generate csv data correctly", () => {
     const league = setupLeague();
-    // eslint-disable-next-line no-console
-    console.log(league.getResultsCSV([]));
     expect(league.getResultsCSV([])).toBe(
       "displayName%2CteamName%2CuserId%2CmatchupId%2Cweek%2CpointsFor%2CpointsAgainst%2Coutcome%0AUserA%2C%22TeamA%22%2C001%2C1%2C1%2C10%2C15%2CLOSS%0AUserB%2C%22TeamB%22%2C002%2C1%2C1%2C15%2C10%2CWIN"
     );
