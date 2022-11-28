@@ -1,5 +1,5 @@
 import range from "lodash/range";
-import { Matchup, Owner, Settings, User, WithPrefix } from "../../interfaces";
+import { Matchup, Owner, User, WithPrefix } from "../../interfaces";
 import { LeagueModel } from "../LeagueModel/LeagueModel";
 import { fetchWrapper } from "../utils/utils";
 import {
@@ -20,26 +20,27 @@ class LeagueModelSleeper extends LeagueModel {
   async initialize(): Promise<void> {
     const { id } = this.settings;
     const BASE_URL = this.getBaseURL();
-    // what if this isn't a real league -> need to gracefully handle errors
-    // TODO handle errors what if one of them fails?
-    const settings: Partial<Settings>[] = await fetchWrapper(
-      `${BASE_URL}/league/${id}`,
-      transformSettings
-    );
-    const owners: Owner[] = await fetchWrapper(
-      `${BASE_URL}/league/${id}/rosters`,
-      transformOwner
-    );
-    const users: User[] = await fetchWrapper(
-      `${BASE_URL}/league/${id}/users`,
-      transformUser
-    );
 
-    this.setSettings(settings[0]);
-    this.setOwners(owners);
-    this.setUsers(users);
+    return fetchWrapper(`${BASE_URL}/league/${id}`, transformSettings)
+      .then(async (settings) => {
+        this.setSettings(settings[0]);
 
-    return Promise.resolve();
+        const owners: Owner[] = await fetchWrapper(
+          `${BASE_URL}/league/${id}/rosters`,
+          transformOwner
+        );
+        const users: User[] = await fetchWrapper(
+          `${BASE_URL}/league/${id}/users`,
+          transformUser
+        );
+
+        this.setOwners(owners);
+        this.setUsers(users);
+        return Promise.resolve();
+      })
+      .catch(() => {
+        return Promise.reject(new Error("League does not exist"));
+      });
   }
 
   async retrieveMatchups(start: number, end: number): Promise<Matchup[][]> {

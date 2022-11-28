@@ -183,9 +183,15 @@ const create = async (
   platform: Platform,
   isDevelopment = false
 ) => {
-  let league = createLeagueModel(id, platform, isDevelopment);
-  await league.initialize();
-  return league;
+  const league = createLeagueModel(id, platform, isDevelopment);
+  return await league
+    .initialize()
+    .then(() => {
+      return league;
+    })
+    .catch((error) => {
+      return Promise.reject(error);
+    });
 };
 
 const fetchWrapper = async <T, U extends {}>(

@@ -35,9 +35,12 @@ class LeagueClient implements ILeagueClient {
     platform: Platform,
     isDevelopment = false
   ): Promise<void> {
-    const league = await create(id, platform, isDevelopment);
-    this.leagues.push(league);
-    return this.subject.next(this.leagues);
+    await create(id, platform, isDevelopment)
+      .then((league) => {
+        this.leagues.push(league);
+        return this.subject.next(this.leagues);
+      })
+      .catch((error) => Promise.reject(error));
   }
 
   removeLeague(id: string) {

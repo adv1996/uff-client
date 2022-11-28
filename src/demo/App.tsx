@@ -15,7 +15,10 @@ const App = () => {
   };
 
   const fetchLeague = useCallback(async () => {
-    await leagueClient.addLeague(value, Platform.SLEEPER, checked);
+    await leagueClient.addLeague(value, Platform.SLEEPER, checked).catch(() => {
+      // eslint-disable-next-line no-console
+      console.log("Could not add league", value);
+    });
   }, [leagueClient, value, checked]);
 
   const fetchMatchups = useCallback(
