@@ -1,4 +1,5 @@
 import { Matchup, Owner, Platform, User } from "@/interfaces";
+import { get } from "lodash";
 import { describe, expect, it } from "vitest";
 import { columns, MISSING } from "../utils/constants";
 import { createLeagueModel } from "../utils/utils";
@@ -92,17 +93,17 @@ describe("League Model", () => {
   it("should generate csv with league headers if no data", () => {
     const league = createLeagueModel("test", Platform.SLEEPER);
     // Special Characters - %2C - comma, %0A - new line
-    expect(league.getResultsCSV([])).toBe(columns.join("%2C") + "%0A");
+    expect(league.getResultsCSV([], [])).toBe(columns.join("%2C") + "%0A");
   });
   it("should generate csv data correctly", () => {
     const league = setupLeague();
-    expect(league.getResultsCSV([])).toBe(
-      "displayName%2CteamName%2CuserId%2CmatchupId%2Cweek%2CpointsFor%2CpointsAgainst%2Coutcome%0AUserA%2C%22TeamA%22%2C001%2C1%2C1%2C10%2C15%2CLOSS%0AUserB%2C%22TeamB%22%2C002%2C1%2C1%2C15%2C10%2CWIN"
+    expect(league.getResultsCSV([], [])).toBe(
+      "displayName%2CteamName%2CuserId%2CmatchupId%2Cweek%2CpointsFor%2CpointsAgainst%2Coutcome%2CstarterIds%0AUserA%2C%22TeamA%22%2C001%2C1%2C1%2C10%2C15%2CLOSS%2C%22PLAYER_ID%22%0AUserB%2C%22TeamB%22%2C002%2C1%2C1%2C15%2C10%2CWIN%2C%22PLAYER_ID%22"
     );
   });
   it("should generate roster information with missing values when players metadata not injected", () => {
     const league = setupLeague();
-    const results = league.getResults([]);
+    const results = league.getResults([], []);
     const week1Team1Results = results[0].weeklyResults[0].roster;
     expect(week1Team1Results.map((roster) => roster.firstName)).toStrictEqual([
       MISSING.FIRST_NAME,
@@ -119,7 +120,7 @@ describe("League Model", () => {
   });
   it("should generate roster information with injected player information", () => {
     const league = setupLeague();
-    const results = league.getResults(players);
+    const results = league.getResults(players, []);
     const week1Team1Results = results[0].weeklyResults[0].roster;
     expect(week1Team1Results.map((roster) => roster.firstName)).toStrictEqual([
       "Pete",
@@ -136,5 +137,15 @@ describe("League Model", () => {
     expect(
       week1Team1Results.map((roster) => roster.fantasyPosition)
     ).toStrictEqual(["QB", "BN"]);
+  });
+  it("should generate roster information with injected player stats", () => {
+    const league = setupLeague();
+    const results = league.getResults(players, [
+      { pid: "P2", week: 1, passTD: 2, recTD: 0, rushTD: 0 },
+    ]);
+    const week1Team1Results = results[0].weeklyResults[0].roster;
+    expect(
+      week1Team1Results.map((roster) => get(roster, "stats.passTD", 0))
+    ).toStrictEqual([0, 2]);
   });
 });

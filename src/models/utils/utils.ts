@@ -5,6 +5,7 @@ import {
   OwnerResults,
   Platform,
   Player,
+  PlayerStat,
   RosterPlayer,
   transformResponse,
   User,
@@ -71,7 +72,9 @@ const getPlayerMetaData = (
 };
 
 const createRoster = (
+  week: string,
   playerMap: Dictionary<Player>,
+  playerStatMap: Record<string, Record<string, PlayerStat>>,
   starterIds: string[],
   starterPoints: number[],
   rosterIds: string[],
@@ -94,11 +97,22 @@ const createRoster = (
 
   const bench: RosterPlayer[] = xor(starterIds, rosterIds).map((id) => {
     const playerMetaData = getPlayerMetaData(playerMap, id);
+
+    // PLAYER STATS
+    const stats = (id in playerStatMap &&
+      week in playerStatMap[id] &&
+      pick(playerStatMap[id][week], ["passTD", "rushTD", "recTD"])) || {
+      passTD: 0,
+      rushTD: 0,
+      recTD: 0,
+    };
+
     return {
       ...playerMetaData,
       points: id in rosterPoints ? rosterPoints[id] : 0,
       isStarter: false,
       fantasyPosition: "BN",
+      stats,
     };
   });
 
@@ -110,6 +124,7 @@ const assembleOwnerMatchups = (
   owners: Owner[],
   matchups: Record<number, Matchup[]>,
   players: Player[],
+  playerStats: PlayerStat[],
   rosterPositions: string[]
 ): OwnerResults[] => {
   const rosterMap = buildRosterUserMap(users, owners);
@@ -117,7 +132,11 @@ const assembleOwnerMatchups = (
   const ownerMatchupsMap: Record<number, Matchup[]> = {};
   const opponentMatchupsMap: Record<number, Matchup[]> = {};
 
+  // # could actually combine the player map and player stats
   const playerMap = keyBy(players, "id");
+  const playerStatMap = mapValues(groupBy(playerStats, "pid"), (value) =>
+    mapValues(groupBy(value, "week"), (values) => values[0])
+  );
 
   weeks.forEach((week) => {
     const weekMatchups = matchups[parseInt(week)];
@@ -158,7 +177,9 @@ const assembleOwnerMatchups = (
         pointsAgainst: team2.points,
         outcome: calculateOutcome(team1.points, team2.points),
         roster: createRoster(
+          team1.week.toString(),
           playerMap,
+          playerStatMap,
           team1.starters,
           team1.startersPoints,
           team1.players,
@@ -224,12 +245,14 @@ const generateCSV = (results: OwnerResults[]) => {
     .map((result) => {
       return result.weeklyResults.map((weeklyResult) => {
         const { roster, ...results } = weeklyResult;
+        const starters = roster.filter((player) => player.isStarter);
         return pick(
           {
             displayName: `${result.user.displayName}`,
             teamName: `"${result.user.teamName}"`,
             userId: result.user.userId,
             ...results,
+            starterIds: `"${starters.map((player) => player.id).join(",")}"`,
           },
           columns
         );

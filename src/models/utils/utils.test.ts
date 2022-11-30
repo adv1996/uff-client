@@ -19,7 +19,7 @@ describe("Utilities", () => {
   it("should calculate results correctly", async () => {
     const league = await create("demo", Platform.SLEEPER);
     await league.retrieveMatchups(1, 2);
-    const results = league.getResults([]);
+    const results = league.getResults([], []);
     expect(results.length).toBe(12);
 
     const owner1Results = results[0];

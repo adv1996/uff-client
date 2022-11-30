@@ -40,3 +40,9 @@ yarn dev:api
 ```
 
 to use `json-server` to create an api on saved leagues.
+
+## API for Player Stats and Projections
+
+```
+uvicorn main:app --reload
+```

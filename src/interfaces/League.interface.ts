@@ -5,6 +5,7 @@ import {
   OwnerResults,
   Platform,
   Player,
+  PlayerStat,
   Settings,
   User,
   WithPrefix,
@@ -22,6 +23,7 @@ export interface LeagueState {
 
 export interface ILeagueClient {
   players: Player[];
+  playerStats: PlayerStat[];
   leagues: League[];
   state: Partial<LeagueState>;
   addLeague(
@@ -36,6 +38,7 @@ export interface ILeagueClient {
     end: number
   ): Promise<void>;
   loadPlayers(isDevelopment?: true): Promise<Player[]>;
+  loadPlayerStats(): Promise<PlayerStat[]>;
   getLeagueState(): Promise<LeagueState>;
 }
 
@@ -47,7 +50,7 @@ export interface League {
   isDevelopment: boolean;
   initialize(): Promise<void>;
   retrieveMatchups(start: number, end: number): Promise<Matchup[][]>;
-  getResults(players: Player[]): OwnerResults[];
-  getResultsCSV(players: Player[]): string;
+  getResults(players: Player[], playerStats: PlayerStat[]): OwnerResults[];
+  getResultsCSV(players: Player[], playerStats: PlayerStat[]): string;
   getBaseURL(): WithPrefix<"http">;
 }

@@ -8,7 +8,7 @@ import {
   Settings,
   User,
 } from "../../interfaces";
-import { Player } from "../../interfaces/Player.interface";
+import { Player, PlayerStat } from "../../interfaces/Player.interface";
 import { assembleOwnerMatchups, generateCSV } from "../utils/utils";
 
 abstract class LeagueModel implements League {
@@ -48,18 +48,19 @@ abstract class LeagueModel implements League {
 
   // FUTURE add capability for certain weeks or users (almost like a filter)
   // What other filters would others like to use?
-  getResults(players: Player[]): OwnerResults[] {
+  getResults(players: Player[], playerStats: PlayerStat[]): OwnerResults[] {
     return assembleOwnerMatchups(
       this.users,
       this.owners,
       this.matchups,
       players,
+      playerStats,
       this.settings.rosterPositions || []
     );
   }
 
-  getResultsCSV(players: Player[]): string {
-    const results = this.getResults(players);
+  getResultsCSV(players: Player[], playerStats: PlayerStat[]): string {
+    const results = this.getResults(players, playerStats);
     return generateCSV(results);
   }
 }
