@@ -37,7 +37,7 @@ const App = () => {
   };
 
   const leagueResults = useMemo(() => {
-    return leagues.map((league) => league.getResults(leagueClient.players));
+    return leagues.map((league) => league.getResults(leagueClient.players, []));
   }, [leagues, leagueClient.players]);
 
   useEffect(() => {
@@ -47,9 +47,21 @@ const App = () => {
     setLoading(true);
 
     // load players for assigning player ids to real names and teams
-    leagueClient.loadPlayers(true).then(() => {
+    // NEED TO INVESTIGATE THIS CALL IS HAPPENING 2x
+    if (leagueClient.players.length === 0) {
+      leagueClient.loadPlayers(true).then(() => {
+        if (leagueClient.playerStats.length === 0) {
+          leagueClient.loadPlayerStats().then(() => {
+            setLoading(false);
+          });
+        } else {
+          setLoading(false);
+        }
+      });
+    } else {
       setLoading(false);
-    });
+    }
+
     return () => {
       subscription.unsubscribe();
     };
@@ -57,7 +69,7 @@ const App = () => {
 
   const getResultsCSV = useCallback(
     (league: League) => {
-      return league.getResultsCSV(leagueClient.players);
+      return league.getResultsCSV(leagueClient.players, []);
     },
     [leagueClient.players]
   );

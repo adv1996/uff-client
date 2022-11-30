@@ -33,3 +33,4 @@ pipeline/leagues/*
 
 __pycache__
 .ipynb_checkpoints
+storage
