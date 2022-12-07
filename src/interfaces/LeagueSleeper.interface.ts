@@ -8,6 +8,7 @@ export interface RawSleeperSettings {
   sport: string;
   status: string;
   total_rosters: number;
+  scoring_settings: Record<string, number>;
 }
 
 export interface RawSleeperMatchup {

@@ -10,6 +10,11 @@ export enum OUTCOME {
 export interface RosterPlayer extends Player {
   isStarter: boolean;
   points: number;
+  stats?: {
+    passTD: number;
+    recTD: number;
+    rushTD: number;
+  };
   fantasyPosition: string;
 }
 

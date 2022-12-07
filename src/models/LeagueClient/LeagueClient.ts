@@ -4,6 +4,8 @@ import {
   LeagueState,
   Platform,
   Player,
+  PlayerStat,
+  RawPlayerStat,
 } from "@/interfaces";
 import { Subject } from "rxjs";
 import { create } from "../utils";
@@ -11,6 +13,8 @@ import { create } from "../utils";
 // TODO move to constants file
 const PLAYERS_URL =
   "https://raw.githubusercontent.com/adv1996/uff-client/main/pipeline/players.json";
+
+const PLAYERS_STAT_URL = "http://127.0.0.1:4400/stats";
 
 const loadLocalPlayers = async (): Promise<any> => {
   return await import("../../../pipeline/players.json").then(
@@ -26,6 +30,7 @@ const loadLocalState = async (): Promise<any> => {
 
 class LeagueClient implements ILeagueClient {
   public players: Player[] = [];
+  public playerStats: PlayerStat[] = [];
   public leagues: League[] = [];
   public subject = new Subject<League[]>();
   public state: Partial<LeagueState> = {};
@@ -78,11 +83,35 @@ class LeagueClient implements ILeagueClient {
       return data;
     }
     const response = await fetch(PLAYERS_URL);
-    const data = await response.json();
+    const data: Player[] = await response.json();
     if (response.ok) {
       if (data && Array.isArray(data)) {
         this.players = data;
         return Promise.resolve(data);
+      } else {
+        return Promise.reject(new Error(`Not Found`));
+      }
+    } else {
+      return Promise.reject(new Error("Request failed"));
+    }
+  }
+
+  async loadPlayerStats(): Promise<PlayerStat[]> {
+    const response = await fetch(PLAYERS_STAT_URL);
+    const data: RawPlayerStat[] = await response.json();
+    if (response.ok) {
+      if (data && Array.isArray(data)) {
+        const transformed = data.map((d) => {
+          return {
+            pid: d.pid,
+            week: d.week,
+            passTD: d.pass_td,
+            rushTD: d.rush_td,
+            recTD: d.rec_td,
+          };
+        });
+        this.playerStats = transformed;
+        return Promise.resolve(transformed);
       } else {
         return Promise.reject(new Error(`Not Found`));
       }

@@ -13,4 +13,5 @@ export interface Settings {
   sport: string;
   status: string;
   totalRosters: number;
+  scoringSettings: Record<string, number>;
 }
