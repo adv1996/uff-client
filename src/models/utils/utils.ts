@@ -123,7 +123,6 @@ const createStats = (
   };
   return stats;
 };
-
 const createRoster = (
   week: string,
   playerMap: Dictionary<Player>,
