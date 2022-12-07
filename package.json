@@ -1,7 +1,7 @@
 {
   "name": "uff-client",
   "private": true,
-  "version": "1.10.0",
+  "version": "1.10.5",
   "type": "module",
   "exports": {
     "import": "./dist/uff-client.es.js",
