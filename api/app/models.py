@@ -17,6 +17,12 @@ class Player(Base):
     rbs = relationship("RB", back_populates="player_id")
     tes = relationship("TE", back_populates="player_id")
 
+    defs = relationship("DEF", back_populates="player_id")
+
+    dbs = relationship("DB", back_populates="player_id")
+    dls = relationship("DL", back_populates="player_id")
+    lbs = relationship("LB", back_populates="player_id")
+
 
 class QB(Base):
     __tablename__ = "QB"
@@ -26,7 +32,7 @@ class QB(Base):
     pass_td = Column(Float, default=0)
     rush_td = Column(Float, default=0)
     rec_td = Column(Float, default=0)
-
+    fum_rec_td = Column(Float, default=0)
 
     player_id = relationship("Player", back_populates="qbs")
 
@@ -38,7 +44,7 @@ class WR(Base):
     pass_td = Column(Float, default=0)
     rush_td = Column(Float, default=0)
     rec_td = Column(Float, default=0)
-
+    fum_rec_td = Column(Float, default=0)
 
     player_id = relationship("Player", back_populates="wrs")
 
@@ -50,7 +56,7 @@ class RB(Base):
     pass_td = Column(Float, default=0)
     rush_td = Column(Float, default=0)
     rec_td = Column(Float, default=0)
-
+    fum_rec_td = Column(Float, default=0)
 
     player_id = relationship("Player", back_populates="rbs")
 
@@ -62,6 +68,44 @@ class TE(Base):
     pass_td = Column(Float, default=0)
     rush_td = Column(Float, default=0)
     rec_td = Column(Float, default=0)
-
+    fum_rec_td = Column(Float, default=0)
 
     player_id = relationship("Player", back_populates="tes")
+
+class DEF(Base):
+    __tablename__ = "DEF"
+
+    pid = Column(String, ForeignKey("player.id"), primary_key=True)
+    week = Column(Integer, primary_key=True)
+    def_st_td = Column(Float, default=0)
+    st_td = Column(Float, default=0)
+    def_td = Column(Float, default=0)
+
+    player_id = relationship("Player", back_populates="defs")
+
+class DB(Base):
+    __tablename__ = "DB"
+
+    pid = Column(String, ForeignKey("player.id"), primary_key=True)
+    week = Column(Integer, primary_key=True)
+    idp_def_td = Column(Float, default=0)
+
+    player_id = relationship("Player", back_populates="dbs")
+
+class DL(Base):
+    __tablename__ = "DL"
+
+    pid = Column(String, ForeignKey("player.id"), primary_key=True)
+    week = Column(Integer, primary_key=True)
+    idp_def_td = Column(Float, default=0)
+
+    player_id = relationship("Player", back_populates="dls")
+
+class LB(Base):
+    __tablename__ = "LB"
+
+    pid = Column(String, ForeignKey("player.id"), primary_key=True)
+    week = Column(Integer, primary_key=True)
+    idp_def_td = Column(Float, default=0)
+
+    player_id = relationship("Player", back_populates="lbs")

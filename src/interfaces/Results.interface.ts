@@ -11,9 +11,7 @@ export interface RosterPlayer extends Player {
   isStarter: boolean;
   points: number;
   stats?: {
-    passTD: number;
-    recTD: number;
-    rushTD: number;
+    ptsTD: number;
   };
   fantasyPosition: string;
 }

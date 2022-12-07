@@ -20,3 +20,23 @@ class StatPlayerBase(BaseModel):
 class StatPlayer(StatPlayerBase):
     class Config:
         orm_mode = True
+
+class StatDefTeamBase(BaseModel):
+    pid: str
+    def_st_td: float
+    st_td: float
+    def_td = float
+    week: int
+
+class StatDefTeam(StatDefTeamBase):
+    class Config:
+        orm_mode = True
+
+class StatDefPlayerBase(BaseModel):
+    pid: str
+    week: int
+    idp_def_td: float
+
+class StatDefPlayer(StatDefPlayerBase):
+    class Config:
+        orm_mode = True

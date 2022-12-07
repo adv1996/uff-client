@@ -73,8 +73,27 @@ const getPlayerMetaData = (
   return playerMetaData;
 };
 
-const fields: (keyof PlayerStat)[] = ["passTD", "rushTD", "recTD"];
-const scoreFields = ["pass_td", "rush_td", "rec_td"];
+const fields: (keyof PlayerStat)[] = [
+  "passTD",
+  "rushTD",
+  "recTD",
+  "fumRecTD",
+  "idpDefTD",
+  "stTD",
+  "defStTD",
+  "defTD",
+];
+
+const scoreFields = [
+  "pass_td",
+  "rush_td",
+  "rec_td",
+  "fum_rec_td",
+  "idp_def_td",
+  "st_td",
+  "def_st_td",
+  "def_td",
+];
 
 const scoreTDs = (
   scoringSettings: Record<string, number>,
@@ -98,16 +117,13 @@ const createStats = (
   const stats = (id &&
     id in playerStatMap &&
     week in playerStatMap[id] && {
-      ...pick(playerStatMap[id][week], ["passTD", "rushTD", "recTD"]),
       ptsTD: scoreTDs(scoringSettings, playerStatMap[id][week]),
     }) || {
-    passTD: 0,
-    rushTD: 0,
-    recTD: 0,
     ptsTD: 0,
   };
   return stats;
 };
+
 const createRoster = (
   week: string,
   playerMap: Dictionary<Player>,

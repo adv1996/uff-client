@@ -85,6 +85,9 @@ describe("League Model", () => {
   const setupLeague = () => {
     const league = createLeagueModel("test", Platform.SLEEPER);
     league.settings.rosterPositions = ["QB", "BN"];
+    league.settings.scoringSettings = {
+      pass_td: 4,
+    };
     league.users = users;
     league.owners = owners;
     league.matchups = [matchups];
@@ -141,11 +144,22 @@ describe("League Model", () => {
   it("should generate roster information with injected player stats", () => {
     const league = setupLeague();
     const results = league.getResults(players, [
-      { pid: "P2", week: 1, passTD: 2, recTD: 0, rushTD: 0 },
+      {
+        pid: "P2",
+        week: 1,
+        passTD: 2,
+        recTD: 0,
+        rushTD: 0,
+        fumRecTD: 0,
+        stTD: 0,
+        defStTD: 0,
+        defTD: 0,
+        idpDefTD: 0,
+      },
     ]);
     const week1Team1Results = results[0].weeklyResults[0].roster;
     expect(
-      week1Team1Results.map((roster) => get(roster, "stats.passTD", 0))
-    ).toStrictEqual([0, 2]);
+      week1Team1Results.map((roster) => get(roster, "stats.ptsTD", 0))
+    ).toStrictEqual([0, 8]);
   });
 });

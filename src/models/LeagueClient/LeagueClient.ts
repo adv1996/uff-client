@@ -105,9 +105,15 @@ class LeagueClient implements ILeagueClient {
           return {
             pid: d.pid,
             week: d.week,
-            passTD: d.pass_td,
-            rushTD: d.rush_td,
-            recTD: d.rec_td,
+            passTD: d?.pass_td || 0,
+            rushTD: d?.rush_td || 0,
+            recTD: d?.rec_td || 0,
+            fumRecTD: d?.fum_rec_td || 0,
+            stTD: d?.st_td || 0,
+            defStTD: d?.def_st_td || 0,
+            defTD: d?.def_td || 0,
+            idpDefTD: d?.idp_def_td || 0,
+            ptsTD: 0,
           };
         });
         this.playerStats = transformed;

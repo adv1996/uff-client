@@ -30,8 +30,9 @@ def read_items(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     players = crud.get_players(db, skip=skip, limit=limit)
     return players
 
-@app.get("/stats", response_model=list[schemas.StatPlayer])
+@app.get("/stats") # response_model=list[schemas.StatPlayer, schemas.StatDefTeam]
 def read_items(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
-    statPlayers = crud.get_stats(db, skip=skip, limit=limit)
-    print(len(statPlayers))
-    return statPlayers
+    statOffPlayers = crud.get_stats_offense(db, skip=skip, limit=limit)
+    statDefTeams = crud.get_stats_defense_teams(db, skip=skip, limit=limit)
+    statDefPlayers = crud.get_stats_defense_players(db, skip=skip, limit=limit)
+    return statOffPlayers + statDefTeams + statDefPlayers 
