@@ -55,7 +55,7 @@ abstract class LeagueModel implements League {
       this.matchups,
       players,
       playerStats,
-      this.settings.rosterPositions || []
+      this.settings
     );
   }
 

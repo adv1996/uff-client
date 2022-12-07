@@ -20,4 +20,5 @@ export interface PlayerStat {
   passTD: number;
   rushTD: number;
   recTD: number;
+  ptsTD: number;
 }

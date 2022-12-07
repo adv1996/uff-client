@@ -37,8 +37,10 @@ const App = () => {
   };
 
   const leagueResults = useMemo(() => {
-    return leagues.map((league) => league.getResults(leagueClient.players, []));
-  }, [leagues, leagueClient.players]);
+    return leagues.map((league) =>
+      league.getResults(leagueClient.players, leagueClient.playerStats)
+    );
+  }, [leagues, leagueClient.players, leagueClient.playerStats]);
 
   useEffect(() => {
     const subscription = leagueClient.onMessage().subscribe((value) => {

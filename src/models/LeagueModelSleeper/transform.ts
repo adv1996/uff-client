@@ -34,6 +34,7 @@ export const transformSettings: transformResponse<
     sport: settings["sport"],
     status: settings["status"],
     totalRosters: settings["total_rosters"],
+    scoringSettings: settings["scoring_settings"],
   };
 };
 

@@ -1,4 +1,5 @@
 import {
+  AtLeast,
   Matchup,
   OUTCOME,
   Owner,
@@ -7,10 +8,11 @@ import {
   Player,
   PlayerStat,
   RosterPlayer,
+  Settings,
   transformResponse,
   User,
 } from "@/interfaces";
-import { Dictionary, pick } from "lodash";
+import { Dictionary, pick, sum } from "lodash";
 import groupBy from "lodash/groupBy";
 import keyBy from "lodash/keyBy";
 import mapValues from "lodash/mapvalues";
@@ -71,6 +73,41 @@ const getPlayerMetaData = (
   return playerMetaData;
 };
 
+const fields: (keyof PlayerStat)[] = ["passTD", "rushTD", "recTD"];
+const scoreFields = ["pass_td", "rush_td", "rec_td"];
+
+const scoreTDs = (
+  scoringSettings: Record<string, number>,
+  playerStat: PlayerStat
+) => {
+  const ptsTD = sum(
+    scoreFields.map((field, index) => {
+      const multiplier = field in scoringSettings ? scoringSettings[field] : 0;
+      return multiplier * parseInt(playerStat[fields[index]].toString());
+    })
+  );
+  return ptsTD;
+};
+
+const createStats = (
+  scoringSettings: Record<string, number>,
+  playerStatMap: Record<string, Record<string, PlayerStat>>,
+  id: string,
+  week: string
+) => {
+  const stats = (id &&
+    id in playerStatMap &&
+    week in playerStatMap[id] && {
+      ...pick(playerStatMap[id][week], ["passTD", "rushTD", "recTD"]),
+      ptsTD: scoreTDs(scoringSettings, playerStatMap[id][week]),
+    }) || {
+    passTD: 0,
+    rushTD: 0,
+    recTD: 0,
+    ptsTD: 0,
+  };
+  return stats;
+};
 const createRoster = (
   week: string,
   playerMap: Dictionary<Player>,
@@ -79,34 +116,39 @@ const createRoster = (
   starterPoints: number[],
   rosterIds: string[],
   rosterPoints: Record<string, number>,
-  rosterPositions: string[]
+  settings: AtLeast<Settings, "id" | "platform">
 ): RosterPlayer[] => {
+  const rosterPositions = settings.rosterPositions || [];
   const starterPositions = rosterPositions.filter(
     (position) => position !== "BN"
   );
   const starterPointsIds = zip(starterIds, starterPoints, starterPositions);
   const starters = starterPointsIds.map((data) => {
     const playerMetaData = getPlayerMetaData(playerMap, data[0]);
+    const id = data[0] || "";
+    const stats = createStats(
+      settings.scoringSettings || {},
+      playerStatMap,
+      id,
+      week
+    );
     return {
       ...playerMetaData,
       points: data[1] || 0,
       isStarter: true,
       fantasyPosition: data[2] || "ST", //TODO make this a special case if we can't zip
+      stats,
     };
   });
 
   const bench: RosterPlayer[] = xor(starterIds, rosterIds).map((id) => {
     const playerMetaData = getPlayerMetaData(playerMap, id);
-
-    // PLAYER STATS
-    const stats = (id in playerStatMap &&
-      week in playerStatMap[id] &&
-      pick(playerStatMap[id][week], ["passTD", "rushTD", "recTD"])) || {
-      passTD: 0,
-      rushTD: 0,
-      recTD: 0,
-    };
-
+    const stats = createStats(
+      settings.scoringSettings || {},
+      playerStatMap,
+      id,
+      week
+    );
     return {
       ...playerMetaData,
       points: id in rosterPoints ? rosterPoints[id] : 0,
@@ -125,7 +167,7 @@ const assembleOwnerMatchups = (
   matchups: Record<number, Matchup[]>,
   players: Player[],
   playerStats: PlayerStat[],
-  rosterPositions: string[]
+  settings: AtLeast<Settings, "id" | "platform">
 ): OwnerResults[] => {
   const rosterMap = buildRosterUserMap(users, owners);
   const weeks = Object.keys(matchups);
@@ -184,7 +226,7 @@ const assembleOwnerMatchups = (
           team1.startersPoints,
           team1.players,
           team1.playersPoints,
-          rosterPositions
+          settings
         ),
       };
     });
