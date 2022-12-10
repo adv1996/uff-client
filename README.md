@@ -22,7 +22,13 @@ This is an important workflow to reduce the number of fetches to third parties d
 
 ```
 cd pipeline
-python3 -m venv env // create virtual env
+
+eval "$(pyenv init --path)"
+eval "$(pyenv init -)"
+eval "$(pyenv virtualenv-init -)"
+
+pyenv activate env
+
 source env/bin/activate // activate virtual env
 pip install -r requirements.txt // install packages for pipeline scripts
 
@@ -44,5 +50,5 @@ to use `json-server` to create an api on saved leagues.
 ## API for Player Stats and Projections
 
 ```
-uvicorn main:app --reload
+uvicorn app.main:app --reload --port 4400
 ```
