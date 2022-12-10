@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.11.0](https://github.com/adv1996/uff-client/compare/v1.10.0...v1.11.0) (2022-12-10)
+
+
+### Features
+
+* **error:** error handling for leagues that dont exist ([158d3a1](https://github.com/adv1996/uff-client/commit/158d3a15f7a473db704663ec1881906cff8fa366))
+* **sqldb:** updated data ([#25](https://github.com/adv1996/uff-client/issues/25)) ([781b8e9](https://github.com/adv1996/uff-client/commit/781b8e9d48f6aa72ed76a96ea18511e69cedb92b))
+* **state:** league client endpoint to fetch current week ([5cc5a0d](https://github.com/adv1996/uff-client/commit/5cc5a0d0183437a96b3355abf3eaa4ede3e43f65))
+
+
+### Bug Fixes
+
+* **console:** remove console ([062bc92](https://github.com/adv1996/uff-client/commit/062bc926eeaa6061bb14c769ff7b4c432b315411))
+* **test:** add line ([45b070b](https://github.com/adv1996/uff-client/commit/45b070b32eeae7abf1845e5232bd0e4c1801c2ca))
+
 ## [1.10.0](https://github.com/adv1996/uff-client/compare/v1.9.0...v1.10.0) (2022-11-16)
 
 
