@@ -9,11 +9,13 @@ import {
   User,
 } from "../../interfaces";
 import { Player, PlayerStat } from "../../interfaces/Player.interface";
+import { Transaction } from "../../interfaces/Transaction.interface";
 import { assembleOwnerMatchups, generateCSV } from "../utils/utils";
 
 abstract class LeagueModel implements League {
   public settings: AtLeast<Settings, "id" | "platform">;
   public matchups: Record<number, Matchup[]> = {};
+  public transactions: Record<number, Transaction[]> = {};
   public owners: Owner[] = [];
   public users: User[] = [];
   public isDevelopment: boolean;
@@ -43,6 +45,10 @@ abstract class LeagueModel implements League {
   }
 
   retrieveMatchups(_start: number, _end: number): Promise<Matchup[][]> {
+    throw new Error("Method not implemented");
+  }
+
+  retrieveTransactions(_start: number, _end: number): Promise<Transaction[]> {
     throw new Error("Method not implemented");
   }
 

@@ -1,11 +1,13 @@
 import range from "lodash/range";
 import { Matchup, Owner, User, WithPrefix } from "../../interfaces";
+import { Transaction } from "../../interfaces/Transaction.interface";
 import { LeagueModel } from "../LeagueModel/LeagueModel";
 import { fetchWrapper } from "../utils/utils";
 import {
   transformMatchup,
   transformOwner,
   transformSettings,
+  transformTransaction,
   transformUser,
 } from "./transform";
 
@@ -62,6 +64,29 @@ class LeagueModelSleeper extends LeagueModel {
       this.matchups[week] = results[index];
     });
     return results;
+  }
+
+  async retrieveTransactions(
+    start: number,
+    end: number
+  ): Promise<Transaction[]> {
+    const { id } = this.settings;
+    const BASE_URL = this.getBaseURL();
+    const transactionRange = range(start, end);
+    const transactions = transactionRange.map((week) => {
+      if (week in this.transactions) {
+        return Promise.resolve(this.transactions[week]);
+      }
+      return fetchWrapper(
+        `${BASE_URL}/league/${id}/transactions/${week}`,
+        transformTransaction(week)
+      );
+    });
+    const results = await Promise.all(transactions);
+    transactionRange.forEach((week, index) => {
+      this.transactions[week] = results[index];
+    });
+    return results.flat();
   }
 }
 

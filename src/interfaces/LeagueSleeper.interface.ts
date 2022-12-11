@@ -35,3 +35,35 @@ export interface RawSleeperUser {
   };
   user_id: string;
 }
+
+interface RawSleeperDraftPick {
+  season: string;
+  round: number;
+  roster_id: number;
+  previous_owner_id: number;
+  owner_id: number;
+}
+
+interface RawSleeperTransactionMetadata {
+  notes: string;
+}
+
+export interface RawSleeperTransaction {
+  type: string;
+  transaction_id: string;
+  status_updated: number; // EPOCH
+  status: string;
+  settings?: {
+    waiver_bid: number;
+    seq: number;
+  };
+  roster_ids: number[];
+  metadata: RawSleeperTransactionMetadata | null;
+  leg: number;
+  drops: Record<string, number> | null;
+  draft_picks: RawSleeperDraftPick[];
+  creator: string;
+  created: number;
+  consentor_ids: number[];
+  adds: Record<string, number> | null;
+}

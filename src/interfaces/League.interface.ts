@@ -10,6 +10,7 @@ import {
   User,
   WithPrefix,
 } from ".";
+import { Transaction } from "./Transaction.interface";
 
 export interface LeagueState {
   week: number;
@@ -37,6 +38,11 @@ export interface ILeagueClient {
     start: number,
     end: number
   ): Promise<void>;
+  retrieveTransactionsByLeague(
+    id: string,
+    start: number,
+    end: number
+  ): Promise<void>;
   loadPlayers(isDevelopment?: true): Promise<Player[]>;
   loadPlayerStats(): Promise<PlayerStat[]>;
   getLeagueState(): Promise<LeagueState>;
@@ -46,10 +52,12 @@ export interface League {
   settings: AtLeast<Settings, "id" | "platform">;
   users: User[];
   matchups: Record<number, Matchup[]>;
+  transactions: Record<number, Transaction[]>;
   owners: Owner[];
   isDevelopment: boolean;
   initialize(): Promise<void>;
   retrieveMatchups(start: number, end: number): Promise<Matchup[][]>;
+  retrieveTransactions(start: number, end: number): Promise<Transaction[]>;
   getResults(players: Player[], playerStats: PlayerStat[]): OwnerResults[];
   getResultsCSV(players: Player[], playerStats: PlayerStat[]): string;
   getBaseURL(): WithPrefix<"http">;
