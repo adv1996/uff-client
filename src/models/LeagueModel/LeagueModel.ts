@@ -8,14 +8,20 @@ import {
   Settings,
   User,
 } from "../../interfaces";
+import { DraftPick } from "../../interfaces/Draft.interface";
 import { Player, PlayerStat } from "../../interfaces/Player.interface";
 import { Transaction } from "../../interfaces/Transaction.interface";
-import { assembleOwnerMatchups, generateCSV } from "../utils/utils";
+import {
+  assembleOwnerMatchups,
+  generateCSV,
+  tracePlayerHistory,
+} from "../utils/utils";
 
 abstract class LeagueModel implements League {
   public settings: AtLeast<Settings, "id" | "platform">;
   public matchups: Record<number, Matchup[]> = {};
   public transactions: Record<number, Transaction[]> = {};
+  public draftPicks: DraftPick[] = [];
   public owners: Owner[] = [];
   public users: User[] = [];
   public isDevelopment: boolean;
@@ -52,6 +58,10 @@ abstract class LeagueModel implements League {
     throw new Error("Method not implemented");
   }
 
+  retrieveDraft(): Promise<DraftPick[]> {
+    throw new Error("Method not implemented");
+  }
+
   // FUTURE add capability for certain weeks or users (almost like a filter)
   // What other filters would others like to use?
   getResults(players: Player[], playerStats: PlayerStat[]): OwnerResults[] {
@@ -68,6 +78,13 @@ abstract class LeagueModel implements League {
   getResultsCSV(players: Player[], playerStats: PlayerStat[]): string {
     const results = this.getResults(players, playerStats);
     return generateCSV(results);
+  }
+
+  getPlayerHistory(): Record<string, string[]> {
+    return tracePlayerHistory(
+      this.draftPicks,
+      Object.values(this.transactions).flat()
+    );
   }
 }
 

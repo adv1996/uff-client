@@ -1,9 +1,11 @@
 import range from "lodash/range";
 import { Matchup, Owner, User, WithPrefix } from "../../interfaces";
+import { DraftPick } from "../../interfaces/Draft.interface";
 import { Transaction } from "../../interfaces/Transaction.interface";
 import { LeagueModel } from "../LeagueModel/LeagueModel";
 import { fetchWrapper } from "../utils/utils";
 import {
+  transformDraft,
   transformMatchup,
   transformOwner,
   transformSettings,
@@ -87,6 +89,20 @@ class LeagueModelSleeper extends LeagueModel {
       this.transactions[week] = results[index];
     });
     return results.flat();
+  }
+
+  async retrieveDraft(): Promise<DraftPick[]> {
+    const { draftId } = this.settings;
+    const BASE_URL = this.getBaseURL();
+    const draftPicks = await fetchWrapper(
+      `${BASE_URL}/draft/${draftId}/picks`,
+      transformDraft
+    );
+
+    if (draftPicks.length > 0) {
+      this.draftPicks = draftPicks;
+    }
+    return Promise.resolve(draftPicks);
   }
 }
 

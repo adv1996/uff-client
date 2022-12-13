@@ -10,6 +10,7 @@ import {
   User,
   WithPrefix,
 } from ".";
+import { DraftPick } from "./Draft.interface";
 import { Transaction } from "./Transaction.interface";
 
 export interface LeagueState {
@@ -43,6 +44,7 @@ export interface ILeagueClient {
     start: number,
     end: number
   ): Promise<void>;
+  retrieveDraftByLeague(id: string): Promise<void>;
   loadPlayers(isDevelopment?: true): Promise<Player[]>;
   loadPlayerStats(): Promise<PlayerStat[]>;
   getLeagueState(): Promise<LeagueState>;
@@ -53,12 +55,18 @@ export interface League {
   users: User[];
   matchups: Record<number, Matchup[]>;
   transactions: Record<number, Transaction[]>;
+  draftPicks: DraftPick[];
   owners: Owner[];
   isDevelopment: boolean;
   initialize(): Promise<void>;
   retrieveMatchups(start: number, end: number): Promise<Matchup[][]>;
   retrieveTransactions(start: number, end: number): Promise<Transaction[]>;
+  retrieveDraft(): Promise<DraftPick[]>;
   getResults(players: Player[], playerStats: PlayerStat[]): OwnerResults[];
   getResultsCSV(players: Player[], playerStats: PlayerStat[]): string;
   getBaseURL(): WithPrefix<"http">;
+  getPlayerHistory(
+    draft: DraftPick[],
+    transactions: Transaction[]
+  ): Record<string, string[]>; // TODO replace string[] with enum of player transactions
 }

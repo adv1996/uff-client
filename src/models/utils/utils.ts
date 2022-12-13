@@ -20,6 +20,8 @@ import sumBy from "lodash/sumBy";
 import xor from "lodash/xor";
 import zip from "lodash/zip";
 import zipWith from "lodash/zipWith";
+import { DraftPick } from "../../interfaces/Draft.interface";
+import { Transaction } from "../../interfaces/Transaction.interface";
 import { League } from "../LeagueModel/LeagueModel";
 import { LeagueModelSleeper } from "../LeagueModelSleeper";
 import { columns, MISSING } from "./constants";
@@ -327,10 +329,63 @@ const generateCSV = (results: OwnerResults[]) => {
   return encodeURIComponent(csvData);
 };
 
+const tracePlayerHistory = (
+  draftPicks: DraftPick[],
+  transactions: Transaction[]
+) => {
+  const playerMap: Record<string, string[]> = {};
+
+  const insertPlayer = (playerId: string, status: string) => {
+    if (playerId in playerMap) {
+      playerMap[playerId].push(status);
+    } else {
+      playerMap[playerId] = [status];
+    }
+  };
+  // add players from draft
+  draftPicks.forEach((player) => {
+    const { playerId } = player;
+    playerMap[playerId] = ["DRAFT"];
+  });
+
+  // inject from transactions
+  transactions.forEach((transaction) => {
+    const playersToAdd = Object.keys(transaction.adds || {});
+    const playersToDrop = Object.keys(transaction.drops || {});
+
+    switch (transaction.type) {
+      case "waiver":
+        playersToAdd.forEach((playerId) => {
+          insertPlayer(playerId, "ADDED");
+        });
+        playersToDrop.forEach((playerId) => {
+          insertPlayer(playerId, "DROPPED");
+        });
+        break;
+      case "free_agent":
+        playersToAdd.forEach((playerId) => {
+          insertPlayer(playerId, "ADDED");
+        });
+        playersToDrop.forEach((playerId) => {
+          insertPlayer(playerId, "DROPPED");
+        });
+        break;
+      case "trade":
+        playersToAdd.forEach((playerId) => {
+          insertPlayer(playerId, "TRADE");
+        });
+        break;
+      default:
+    }
+  });
+  return playerMap;
+};
+
 export {
   create,
   createLeagueModel,
   assembleOwnerMatchups,
   fetchWrapper,
   generateCSV,
+  tracePlayerHistory,
 };

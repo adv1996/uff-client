@@ -9,6 +9,7 @@ export interface RawSleeperSettings {
   status: string;
   total_rosters: number;
   scoring_settings: Record<string, number>;
+  draft_id: string;
 }
 
 export interface RawSleeperMatchup {
@@ -36,7 +37,7 @@ export interface RawSleeperUser {
   user_id: string;
 }
 
-interface RawSleeperDraftPick {
+interface RawSleeperTradedDraftPick {
   season: string;
   round: number;
   roster_id: number;
@@ -61,9 +62,19 @@ export interface RawSleeperTransaction {
   metadata: RawSleeperTransactionMetadata | null;
   leg: number;
   drops: Record<string, number> | null;
-  draft_picks: RawSleeperDraftPick[];
+  draft_picks: RawSleeperTradedDraftPick[];
   creator: string;
   created: number;
   consentor_ids: number[];
   adds: Record<string, number> | null;
+}
+
+export interface RawSleeperDraftPick {
+  round: number;
+  roster_id: number;
+  player_id: string;
+  picked_by: string;
+  pick_no: number;
+  draft_slot: number;
+  draft_id: string;
 }

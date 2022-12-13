@@ -90,6 +90,16 @@ class LeagueClient implements ILeagueClient {
     return this.subject.next(this.leagues);
   }
 
+  async retrieveDraftByLeague(id: string): Promise<void> {
+    const findIndex = this.leagues.findIndex(
+      (league) => league.settings.id === id
+    );
+    if (findIndex >= 0) {
+      await this.leagues[findIndex].retrieveDraft();
+      return this.subject.next(this.leagues);
+    }
+    return this.subject.next(this.leagues);
+  }
   // should this use the consolidate fetchWrapper func?
   async loadPlayers(isDevelopment = false): Promise<Player[]> {
     if (isDevelopment) {

@@ -14,4 +14,5 @@ export interface Settings {
   status: string;
   totalRosters: number;
   scoringSettings: Record<string, number>;
+  draftId: string;
 }

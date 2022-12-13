@@ -1,4 +1,4 @@
-export interface DraftPick {
+export interface TradedDraftPick {
   season: string;
   round: number;
   rosterId: number;
@@ -14,7 +14,7 @@ export interface Transaction {
   status: string; // TODO turn to enum
   adds: Record<string, number> | null;
   drops: Record<string, number> | null;
-  tradedDraftPicks: DraftPick[];
+  tradedDraftPicks: TradedDraftPick[];
   rosterIds: number[];
   waiverBid: number | null;
   seq: number | null;

@@ -1,6 +1,7 @@
 import {
   Matchup,
   Owner,
+  RawSleeperDraftPick,
   RawSleeperMatchup,
   RawSleeperRoster,
   RawSleeperSettings,
@@ -11,6 +12,7 @@ import {
   User,
   WithPrefix,
 } from "../../interfaces";
+import { DraftPick } from "../../interfaces/Draft.interface";
 import { Transaction } from "../../interfaces/Transaction.interface";
 
 type transformMatchupByWeek = (
@@ -41,6 +43,7 @@ export const transformSettings: transformResponse<
     status: settings["status"],
     totalRosters: settings["total_rosters"],
     scoringSettings: settings["scoring_settings"],
+    draftId: settings["draft_id"],
   };
 };
 
@@ -101,5 +104,19 @@ export const transformUser: transformResponse<RawSleeperUser, User> = (
     displayName: user.display_name,
     teamName: user?.metadata?.team_name || user.display_name,
     avatar: avatarURL(user),
+  };
+};
+
+export const transformDraft: transformResponse<
+  RawSleeperDraftPick,
+  DraftPick
+> = (pick): DraftPick => {
+  return {
+    round: pick.round,
+    rosterId: pick.roster_id,
+    playerId: pick.player_id,
+    pickedBy: pick.picked_by,
+    pickNo: pick.pick_no,
+    draftSlot: pick.draft_slot,
   };
 };
