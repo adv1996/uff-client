@@ -32,6 +32,24 @@ const App = () => {
     [leagueClient, weeks]
   );
 
+  const fetchTransactions = useCallback(
+    async (league: League) => {
+      await leagueClient.retrieveTransactionsByLeague(
+        league.settings.id,
+        1,
+        parseInt(weeks)
+      );
+    },
+    [leagueClient, weeks]
+  );
+
+  const fetchDraft = useCallback(
+    async (league: League) => {
+      await leagueClient.retrieveDraftByLeague(league.settings.id);
+    },
+    [leagueClient]
+  );
+
   const removeLeague = (id: string) => {
     leagueClient.removeLeague(id);
   };
@@ -147,6 +165,18 @@ const App = () => {
                         className="tw-bg-green-200 tw-px-2 tw-border tw-border-black"
                       >
                         Retrieve Matchups
+                      </button>
+                      <button
+                        onClick={() => fetchTransactions(league)}
+                        className="tw-bg-green-200 tw-px-2 tw-border tw-border-black"
+                      >
+                        Retrieve Transactions
+                      </button>
+                      <button
+                        onClick={() => fetchDraft(league)}
+                        className="tw-bg-green-200 tw-px-2 tw-border tw-border-black"
+                      >
+                        Retrieve Draft
                       </button>
                       <button
                         onClick={() => removeLeague(league.settings.id)}

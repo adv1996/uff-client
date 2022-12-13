@@ -93,17 +93,20 @@ describe("League Model", () => {
     league.matchups = [matchups];
     return league;
   };
+
   it("should generate csv with league headers if no data", () => {
     const league = createLeagueModel("test", Platform.SLEEPER);
     // Special Characters - %2C - comma, %0A - new line
     expect(league.getResultsCSV([], [])).toBe(columns.join("%2C") + "%0A");
   });
+
   it("should generate csv data correctly", () => {
     const league = setupLeague();
     expect(league.getResultsCSV([], [])).toBe(
       "displayName%2CteamName%2CuserId%2CmatchupId%2Cweek%2CpointsFor%2CpointsAgainst%2Coutcome%2CstarterIds%0AUserA%2C%22TeamA%22%2C001%2C1%2C1%2C10%2C15%2CLOSS%2C%22PLAYER_ID%22%0AUserB%2C%22TeamB%22%2C002%2C1%2C1%2C15%2C10%2CWIN%2C%22PLAYER_ID%22"
     );
   });
+
   it("should generate roster information with missing values when players metadata not injected", () => {
     const league = setupLeague();
     const results = league.getResults([], []);
@@ -121,6 +124,7 @@ describe("League Model", () => {
       MISSING.TEAM_NAME,
     ]);
   });
+
   it("should generate roster information with injected player information", () => {
     const league = setupLeague();
     const results = league.getResults(players, []);
@@ -141,6 +145,7 @@ describe("League Model", () => {
       week1Team1Results.map((roster) => roster.fantasyPosition)
     ).toStrictEqual(["QB", "BN"]);
   });
+
   it("should generate roster information with injected player stats", () => {
     const league = setupLeague();
     const results = league.getResults(players, [
