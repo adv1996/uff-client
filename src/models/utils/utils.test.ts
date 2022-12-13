@@ -34,7 +34,7 @@ describe("Utilities", () => {
     expect(owner2Results.totalPointsAgainst).toBe(99.08);
   });
 
-  it.only("should trace player history from draft and transactions", () => {
+  it("should trace player history from draft and transactions", () => {
     const transactions: Transaction[] = [
       {
         week: 1,
