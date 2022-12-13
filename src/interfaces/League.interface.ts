@@ -65,8 +65,5 @@ export interface League {
   getResults(players: Player[], playerStats: PlayerStat[]): OwnerResults[];
   getResultsCSV(players: Player[], playerStats: PlayerStat[]): string;
   getBaseURL(): WithPrefix<"http">;
-  getPlayerHistory(
-    draft: DraftPick[],
-    transactions: Transaction[]
-  ): Record<string, string[]>; // TODO replace string[] with enum of player transactions
+  getPlayerHistory(): Record<string, string[]>; // TODO replace string[] with enum of player transactions
 }

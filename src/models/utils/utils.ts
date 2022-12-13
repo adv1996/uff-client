@@ -353,29 +353,31 @@ const tracePlayerHistory = (
     const playersToAdd = Object.keys(transaction.adds || {});
     const playersToDrop = Object.keys(transaction.drops || {});
 
-    switch (transaction.type) {
-      case "waiver":
-        playersToAdd.forEach((playerId) => {
-          insertPlayer(playerId, "ADDED");
-        });
-        playersToDrop.forEach((playerId) => {
-          insertPlayer(playerId, "DROPPED");
-        });
-        break;
-      case "free_agent":
-        playersToAdd.forEach((playerId) => {
-          insertPlayer(playerId, "ADDED");
-        });
-        playersToDrop.forEach((playerId) => {
-          insertPlayer(playerId, "DROPPED");
-        });
-        break;
-      case "trade":
-        playersToAdd.forEach((playerId) => {
-          insertPlayer(playerId, "TRADE");
-        });
-        break;
-      default:
+    if (transaction.status === "complete") {
+      switch (transaction.type) {
+        case "waiver":
+          playersToAdd.forEach((playerId) => {
+            insertPlayer(playerId, "ADDED");
+          });
+          playersToDrop.forEach((playerId) => {
+            insertPlayer(playerId, "DROPPED");
+          });
+          break;
+        case "free_agent":
+          playersToAdd.forEach((playerId) => {
+            insertPlayer(playerId, "ADDED");
+          });
+          playersToDrop.forEach((playerId) => {
+            insertPlayer(playerId, "DROPPED");
+          });
+          break;
+        case "trade":
+          playersToAdd.forEach((playerId) => {
+            insertPlayer(playerId, "TRADE");
+          });
+          break;
+        default:
+      }
     }
   });
   return playerMap;
