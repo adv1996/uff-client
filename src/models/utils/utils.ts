@@ -12,7 +12,7 @@ import {
   transformResponse,
   User,
 } from "@/interfaces";
-import { Dictionary, pick, sum } from "lodash";
+import { Dictionary, orderBy, pick, sum } from "lodash";
 import groupBy from "lodash/groupBy";
 import keyBy from "lodash/keyBy";
 import mapValues from "lodash/mapvalues";
@@ -334,7 +334,11 @@ const tracePlayerHistory = (
   transactions: Transaction[]
 ) => {
   const playerMap: Record<string, string[]> = {};
-
+  const sortedTransactions = orderBy(
+    Object.values(transactions).flat(),
+    ["statusUpdated"],
+    ["asc"]
+  );
   const insertPlayer = (playerId: string, status: string) => {
     if (playerId in playerMap) {
       playerMap[playerId].push(status);
@@ -349,10 +353,12 @@ const tracePlayerHistory = (
   });
 
   // inject from transactions
-  transactions.forEach((transaction) => {
+  sortedTransactions.forEach((transaction) => {
     const playersToAdd = Object.keys(transaction.adds || {});
     const playersToDrop = Object.keys(transaction.drops || {});
 
+    // TEST ORDER OF TRANSACTIONS
+    // TEST WHETHER TRANSACTIONS WAS SUCCESSFUL
     if (transaction.status === "complete") {
       switch (transaction.type) {
         case "waiver":
