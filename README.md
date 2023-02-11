@@ -1,6 +1,6 @@
 # Universal Fantasy Football - Client (uff-client)
 
-Aggregrate fantasy football from across various platforms into a single schema to pull data from.
+Aggregate fantasy football from across various platforms into a single schema to pull data from.
 
 Leverage platform agnostic data fetching methods to generate league analytics.
 
@@ -21,7 +21,7 @@ If you want to start testing on real leagues and want to seed your mock data wit
 This is an important workflow to reduce the number of fetches to third parties during development and speeds up local development.
 
 ```
-cd pipeline
+cd api
 
 eval "$(pyenv init --path)"
 eval "$(pyenv init -)"
@@ -33,7 +33,7 @@ source env/bin/activate // activate virtual env
 pip install -r requirements.txt // install packages for pipeline scripts
 
 python league.py 784961395996356608 1 10
-python league.py {LEAGUE_ID} {STARTWEEK} {ENDWEEK}
+python league.py {LEAGUE_ID} {START_WEEK} {END_WEEK}
 
 python api.py
 ```
