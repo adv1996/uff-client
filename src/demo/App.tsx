@@ -93,6 +93,11 @@ const App = () => {
     },
     [leagueClient.players]
   );
+
+  const printSettings = useCallback((league: League) => {
+    // eslint-disable-next-line no-console
+    console.log(league.settings);
+  }, []);
   return (
     <main>
       <div className="tw-p-4">
@@ -160,6 +165,7 @@ const App = () => {
                   return (
                     <div key={league.settings.id}>
                       <li>{league.settings.name}</li>
+                      printSettings
                       <button
                         onClick={() => fetchMatchups(league)}
                         className="tw-bg-green-200 tw-px-2 tw-border tw-border-black"
@@ -183,6 +189,12 @@ const App = () => {
                         className="tw-bg-red-200 tw-px-2 tw-border tw-border-black"
                       >
                         Remove
+                      </button>
+                      <button
+                        onClick={() => printSettings(league)}
+                        className="tw-bg-green-200 tw-px-2 tw-border tw-border-black"
+                      >
+                        Output Settings
                       </button>
                       <a
                         href={`data:text/csv;charset=utf-8,${getResultsCSV(

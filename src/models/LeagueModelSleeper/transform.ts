@@ -44,6 +44,7 @@ export const transformSettings: transformResponse<
     totalRosters: settings["total_rosters"],
     scoringSettings: settings["scoring_settings"],
     draftId: settings["draft_id"],
+    playoffWeekStart: settings["settings"]["playoff_week_start"],
   };
 };
 

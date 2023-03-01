@@ -15,4 +15,5 @@ export interface Settings {
   totalRosters: number;
   scoringSettings: Record<string, number>;
   draftId: string;
+  playoffWeekStart: number;
 }

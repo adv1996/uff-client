@@ -10,6 +10,9 @@ export interface RawSleeperSettings {
   total_rosters: number;
   scoring_settings: Record<string, number>;
   draft_id: string;
+  settings: {
+    playoff_week_start: number;
+  };
 }
 
 export interface RawSleeperMatchup {
