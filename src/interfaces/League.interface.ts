@@ -28,11 +28,21 @@ export interface ILeagueClient {
   playerStats: PlayerStat[];
   leagues: League[];
   state: Partial<LeagueState>;
-  addLeague(
-    id: string,
-    platform: Platform,
-    isDevelopment?: boolean
-  ): Promise<void>;
+  addLeague({
+    id,
+    platform,
+    isDevelopment,
+  }:
+    | {
+        id: string;
+        platform: Platform.SLEEPER;
+        isDevelopment?: boolean;
+      }
+    | {
+        id: string;
+        platform: Platform.YAHOO;
+        isDevelopment?: boolean;
+      }): Promise<void>;
   removeLeague(id: string): void;
   retrieveMatchupsByLeague(
     id: string,

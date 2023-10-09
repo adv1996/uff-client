@@ -1,6 +1,7 @@
 export enum Platform {
   SLEEPER = "SLEEPER",
   ESPN = "ESPN",
+  YAHOO = "YAHOO",
 }
 
 export interface Settings {

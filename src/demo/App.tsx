@@ -5,21 +5,45 @@ import "../index.css";
 const App = () => {
   const leagueClient = useMemo(() => new LeagueClient(), []);
   const [leagues, setLeagues] = useState<League[]>([]);
-  const [value, setValue] = useState("demo");
+  const [value, setValue] = useState("1243865");
   const [weeks, setWeeks] = useState("2");
   const [checked, setChecked] = useState(false);
   const [isLoading, setLoading] = useState(false);
+  const [accessToken, setAccessToken] = useState("");
+
+  const [selectedPlatform, setSelectedPlatform] = useState<Platform>(
+    Platform.YAHOO
+  ); // Initial value can be whatever you prefer
 
   const handleChange = () => {
     setChecked(!checked);
   };
 
   const fetchLeague = useCallback(async () => {
-    await leagueClient.addLeague(value, Platform.SLEEPER, checked).catch(() => {
-      // eslint-disable-next-line no-console
-      console.log("Could not add league", value);
-    });
-  }, [leagueClient, value, checked]);
+    if (selectedPlatform === Platform.SLEEPER) {
+      await leagueClient
+        .addLeague({
+          id: value,
+          platform: Platform.SLEEPER,
+          isDevelopment: checked,
+        })
+        .catch(() => {
+          // eslint-disable-next-line no-console
+          console.log("Could not add league", value);
+        });
+    } else if (selectedPlatform === Platform.YAHOO) {
+      await leagueClient
+        .addLeague({
+          id: value,
+          platform: Platform.YAHOO,
+          isDevelopment: checked,
+        })
+        .catch(() => {
+          // eslint-disable-next-line no-console
+          console.log("Could not add league", value);
+        });
+    }
+  }, [selectedPlatform, leagueClient, value, checked]);
 
   const fetchMatchups = useCallback(
     async (league: League) => {
@@ -99,7 +123,7 @@ const App = () => {
         <h1 className="tw-text-5xl">Universal Fantasy Football Client</h1>
       </div>
       <div className="tw-container tw-mx-auto">
-        <div className="tw-flex tw-flex-ro tw-space-x-10">
+        <div className="tw-flex tw-flex-row tw-space-x-10">
           <div>
             <h2 className="tw-text-xl">How to Use?</h2>
             <ol className="tw-list-decimal">
@@ -117,10 +141,16 @@ const App = () => {
             <h2 className="tw-text-xl">Try it out!</h2>
             <div>
               <label>Choose Platform</label>
-              <select className="tw-border tw-border-black tw-mx-2">
-                <option>SLEEPER</option>
-                <option>ESPN</option>
-                <option>YAHOO</option>
+              <select
+                value={selectedPlatform}
+                onChange={(event) =>
+                  setSelectedPlatform(event.target.value as Platform)
+                }
+                className="tw-border tw-border-black tw-mx-2"
+              >
+                <option value={Platform.SLEEPER}>SLEEPER</option>
+                <option value={Platform.ESPN}>ESPN</option>
+                <option value={Platform.YAHOO}>YAHOO</option>
               </select>
               <label>Enter League ID</label>
               <input
@@ -129,6 +159,18 @@ const App = () => {
                 onChange={(e) => setValue(e.target.value)}
                 value={value}
               />
+              {selectedPlatform === Platform.YAHOO && (
+                <>
+                  <label>Enter Access Token</label>
+                  <input
+                    type="text"
+                    className="tw-border tw-border-black"
+                    onChange={(e) => setAccessToken(e.target.value)}
+                    value={accessToken}
+                    placeholder="Access Token"
+                  />
+                </>
+              )}
               {!isLoading && (
                 <button
                   className="tw-bg-green-200 tw-px-2 tw-border tw-border-black"

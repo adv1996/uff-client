@@ -34,3 +34,6 @@ pipeline/leagues/*
 __pycache__
 .ipynb_checkpoints
 storage
+
+pipeline/player_stats
+pipeline/token.json
