@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.12.0](https://github.com/adv1996/uff-client/compare/v1.11.0...v1.12.0) (2023-09-12)
+
+
+### Features
+
+* **workflow:** dispatch manually ([bcec10e](https://github.com/adv1996/uff-client/commit/bcec10e6a1f27f9a9098e39f07b76354ada05047))
+
 ## [1.11.0](https://github.com/adv1996/uff-client/compare/v1.10.0...v1.11.0) (2022-12-10)
 
 
