@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.12.0](https://github.com/adv1996/uff-client/compare/v1.11.0...v1.12.0) (2023-10-09)
+
+
+### Features
+
+* **workflow:** dispatch manually ([bcec10e](https://github.com/adv1996/uff-client/commit/bcec10e6a1f27f9a9098e39f07b76354ada05047))
+* **yahoo:** integration ([#29](https://github.com/adv1996/uff-client/issues/29)) ([1186284](https://github.com/adv1996/uff-client/commit/11862847f842f31080c219e2aeddaaac5cd38272))
+
 ## [1.11.0](https://github.com/adv1996/uff-client/compare/v1.10.0...v1.11.0) (2022-12-10)
 
 
