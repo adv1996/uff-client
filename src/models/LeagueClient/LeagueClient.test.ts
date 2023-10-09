@@ -13,13 +13,13 @@ describe("League Client", () => {
 
   it("should be able to add leagues", async () => {
     const client = new LeagueClient();
-    await client.addLeague("demo", Platform.SLEEPER);
+    await client.addLeague({ id: "demo", platform: Platform.SLEEPER });
     expect(client.leagues.length).toBe(1);
   });
 
   it("should be able to delete leagues", async () => {
     const client = new LeagueClient();
-    await client.addLeague("demo", Platform.SLEEPER);
+    await client.addLeague({ id: "demo", platform: Platform.SLEEPER });
     expect(client.leagues.length).toBe(1);
     client.removeLeague("demo");
     expect(client.leagues.length).toBe(0);

@@ -36,16 +36,25 @@ class LeagueClient implements ILeagueClient {
   public state: Partial<LeagueState> = {};
 
   async addLeague(
-    id: string,
-    platform: Platform,
-    isDevelopment = false
+    props: Parameters<ILeagueClient["addLeague"]>[number]
   ): Promise<void> {
-    await create(id, platform, isDevelopment)
-      .then((league) => {
-        this.leagues.push(league);
-        return this.subject.next(this.leagues);
-      })
-      .catch((error) => Promise.reject(error));
+    if (props.platform === Platform.SLEEPER) {
+      const { id, platform, isDevelopment } = props;
+      await create(id, platform, isDevelopment)
+        .then((league) => {
+          this.leagues.push(league);
+          return this.subject.next(this.leagues);
+        })
+        .catch((error) => Promise.reject(error));
+    } else if (props.platform === Platform.YAHOO) {
+      const { id, platform, isDevelopment } = props;
+      await create(id, platform, isDevelopment)
+        .then((league) => {
+          this.leagues.push(league);
+          return this.subject.next(this.leagues);
+        })
+        .catch((error) => Promise.reject(error));
+    }
   }
 
   removeLeague(id: string) {
